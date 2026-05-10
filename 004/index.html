@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非遗手作工艺藏品登记管理系统</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">非遗手作工艺藏品登记管理系统</h1>
+                <div class="header-info">
+                    <span id="current-user">当前用户：管理员</span>
+                    <span id="current-time"></span>
+                </div>
+            </div>
+        </header>
+
+        <nav class="app-nav">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="crafts">工艺品类管理</button>
+                <button class="nav-tab" data-tab="collections">藏品信息管理</button>
+                <button class="nav-tab" data-tab="borrow">借用与封存</button>
+                <button class="nav-tab" data-tab="logs">操作履历日志</button>
+            </div>
+        </nav>
+
+        <main class="app-main">
+            <section id="crafts-section" class="tab-section active">
+                <div class="section-header">
+                    <h2>工艺品类管理</h2>
+                    <button class="btn btn-primary" id="add-craft-btn">
+                        <span>+ 添加工艺品类</span>
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>工艺品类名称</th>
+                                    <th>描述</th>
+                                    <th>关联藏品数</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crafts-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="collections-section" class="tab-section">
+                <div class="section-header">
+                    <h2>藏品信息管理</h2>
+                    <button class="btn btn-primary" id="add-collection-btn">
+                        <span>+ 添加藏品</span>
+                    </button>
+                </div>
+                
+                <div class="card filter-card">
+                    <h3>筛选条件</h3>
+                    <div class="filter-row">
+                        <div class="filter-item">
+                            <label>关键词搜索</label>
+                            <input type="text" id="filter-keyword" placeholder="搜索藏品名称、匠人...">
+                        </div>
+                        <div class="filter-item">
+                            <label>工艺品类</label>
+                            <select id="filter-craft">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>存量范围</label>
+                            <select id="filter-stock">
+                                <option value="">全部</option>
+                                <option value="0">无库存</option>
+                                <option value="1-5">1-5件</option>
+                                <option value="6-20">6-20件</option>
+                                <option value="21+">20件以上</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>入库年限</label>
+                            <select id="filter-year">
+                                <option value="">全部</option>
+                                <option value="1">1年内</option>
+                                <option value="3">3年内</option>
+                                <option value="5">5年内</option>
+                                <option value="10">10年以上</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>珍贵等级</label>
+                            <select id="filter-level">
+                                <option value="">全部</option>
+                                <option value="普通">普通</option>
+                                <option value="珍贵">珍贵</option>
+                                <option value="特级">特级</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>藏品状态</label>
+                            <select id="filter-status">
+                                <option value="">全部</option>
+                                <option value="正常">正常</option>
+                                <option value="借用中">借用中</option>
+                                <option value="已封存">已封存</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>存放展馆</label>
+                            <select id="filter-gallery">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary" id="reset-filter">重置</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>藏品编号</th>
+                                    <th>藏品名称</th>
+                                    <th>工艺品类</th>
+                                    <th>工艺流派</th>
+                                    <th>制作匠人</th>
+                                    <th>珍贵等级</th>
+                                    <th>总数量</th>
+                                    <th>可用数量</th>
+                                    <th>存放展馆</th>
+                                    <th>入库年限</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="collections-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="borrow-section" class="tab-section">
+                <div class="section-header">
+                    <h2>藏品借用与封存</h2>
+                </div>
+                
+                <div class="card">
+                    <h3>待处理操作</h3>
+                    <div class="borrow-actions">
+                        <button class="btn btn-primary" id="borrow-btn">
+                            <span>展品借用登记</span>
+                        </button>
+                        <button class="btn btn-success" id="return-btn">
+                            <span>归还入库</span>
+                        </button>
+                        <button class="btn btn-warning" id="seal-btn">
+                            <span>破损封存</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>借用中的藏品</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>借用编号</th>
+                                    <th>藏品名称</th>
+                                    <th>借用数量</th>
+                                    <th>借用展馆</th>
+                                    <th>经办人</th>
+                                    <th>借用时间</th>
+                                    <th>预计归还</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="borrow-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="logs-section" class="tab-section">
+                <div class="section-header">
+                    <h2>操作履历日志</h2>
+                </div>
+                
+                <div class="card filter-card">
+                    <h3>日志筛选</h3>
+                    <div class="filter-row">
+                        <div class="filter-item">
+                            <label>操作类型</label>
+                            <select id="log-type-filter">
+                                <option value="">全部</option>
+                                <option value="添加">添加</option>
+                                <option value="修改">修改</option>
+                                <option value="删除">删除</option>
+                                <option value="借用">借用</option>
+                                <option value="归还">归还</option>
+                                <option value="封存">封存</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label>开始日期</label>
+                            <input type="date" id="log-start-date">
+                        </div>
+                        <div class="filter-item">
+                            <label>结束日期</label>
+                            <input type="date" id="log-end-date">
+                        </div>
+                        <button class="btn btn-secondary" id="reset-log-filter">重置</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>日志编号</th>
+                                    <th>操作时间</th>
+                                    <th>操作类型</th>
+                                    <th>操作内容</th>
+                                    <th>经办人</th>
+                                    <th>藏品名称</th>
+                                    <th>数量变化</th>
+                                    <th>剩余存量</th>
+                                    <th>状态变更</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logs-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay"></div>
+    <div id="modal-container" class="modal-container"></div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/statusManager.js"></script>
+    <script src="js/components/modal.js"></script>
+    <script src="js/components/toast.js"></script>
+    <script src="js/modules/crafts.js"></script>
+    <script src="js/modules/collections.js"></script>
+    <script src="js/modules/borrow.js"></script>
+    <script src="js/modules/logs.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

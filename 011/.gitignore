@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-ssr
+*.local
+.vite/*
+!.vite/extensions
+.DS_Store
+coverage
+*.local

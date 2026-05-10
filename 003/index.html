@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园实验室综合管理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>� 校园实验室综合管理系统</h1>
+            <nav class="tabs">
+                <button class="tab-btn active" data-tab="categories">绿植品类</button>
+                <button class="tab-btn" data-tab="plants">绿植档案</button>
+                <button class="tab-btn" data-tab="tasks">养护任务</button>
+                <button class="tab-btn" data-tab="logs">养护履历</button>
+                <button class="tab-btn" data-tab="reagents">试剂管理</button>
+                <button class="tab-btn" data-tab="reagentLogs">试剂日志</button>
+                <button class="tab-btn" data-tab="operationLogs">操作日志</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- 品类管理 -->
+            <section id="categories" class="tab-content active">
+                <div class="section-header">
+                    <h2>绿植品类管理</h2>
+                    <button class="btn-primary" onclick="openCategoryModal()">+ 添加品类</button>
+                </div>
+                <div class="category-list" id="categoryList"></div>
+            </section>
+
+            <!-- 绿植档案 -->
+            <section id="plants" class="tab-content">
+                <div class="section-header">
+                    <h2>绿植档案管理</h2>
+                    <button class="btn-primary" onclick="openPlantModal()">+ 添加档案</button>
+                </div>
+                <div class="filters">
+                    <select id="filterCategory">
+                        <option value="">全品类</option>
+                    </select>
+                    <select id="filterArea">
+                        <option value="">全区域</option>
+                        <option value="教学楼">教学楼</option>
+                        <option value="办公楼">办公楼</option>
+                        <option value="图书馆">图书馆</option>
+                        <option value="实验室">实验室</option>
+                        <option value="宿舍区">宿舍区</option>
+                    </select>
+                    <select id="filterCycle">
+                        <option value="">全周期</option>
+                        <option value="3天">3天</option>
+                        <option value="7天">7天</option>
+                        <option value="14天">14天</option>
+                        <option value="30天">30天</option>
+                    </select>
+                    <select id="filterStatus">
+                        <option value="">全部状态</option>
+                        <option value="健康">健康</option>
+                        <option value="良好">良好</option>
+                        <option value="需养护">需养护</option>
+                        <option value="枯萎">枯萎</option>
+                    </select>
+                </div>
+                <div class="plant-list" id="plantList"></div>
+            </section>
+
+            <!-- 养护任务 -->
+            <section id="tasks" class="tab-content">
+                <div class="section-header">
+                    <h2>养护任务登记</h2>
+                </div>
+                <div class="task-options">
+                    <div class="task-card" onclick="openTaskModal('water')">
+                        <div class="task-icon">💧</div>
+                        <div class="task-title">日常浇水</div>
+                    </div>
+                    <div class="task-card" onclick="openTaskModal('trim')">
+                        <div class="task-icon">✂️</div>
+                        <div class="task-title">修剪施肥</div>
+                    </div>
+                    <div class="task-card" onclick="openTaskModal('pest')">
+                        <div class="task-icon">🐛</div>
+                        <div class="task-title">病虫害处理</div>
+                    </div>
+                    <div class="task-card" onclick="openTaskModal('wither')">
+                        <div class="task-icon">🍂</div>
+                        <div class="task-title">枯萎报备淘汰</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 养护履历 -->
+            <section id="logs" class="tab-content">
+                <div class="section-header">
+                    <h2>养护履历日志</h2>
+                </div>
+                <div class="filters">
+                    <select id="logFilterPlant">
+                        <option value="">全部绿植</option>
+                    </select>
+                    <select id="logFilterType">
+                        <option value="">全部类型</option>
+                        <option value="water">日常浇水</option>
+                        <option value="trim">修剪施肥</option>
+                        <option value="pest">病虫害处理</option>
+                        <option value="wither">枯萎报备淘汰</option>
+                    </select>
+                    <select id="logFilterStatus">
+                        <option value="">全部状态</option>
+                        <option value="健康">健康</option>
+                        <option value="良好">良好</option>
+                        <option value="需养护">需养护</option>
+                        <option value="枯萎">枯萎</option>
+                    </select>
+                    <input type="date" id="logFilterDate" placeholder="筛选日期">
+                </div>
+                <div class="log-list" id="logList"></div>
+            </section>
+
+            <!-- 试剂管理 -->
+            <section id="reagents" class="tab-content">
+                <div class="section-header">
+                    <h2>试剂管理</h2>
+                    <button class="btn-primary" onclick="openReagentModal()">+ 添加试剂</button>
+                </div>
+                <div class="filters">
+                    <select id="reagentFilterCategory">
+                        <option value="">全类别</option>
+                        <option value="有机溶剂">有机溶剂</option>
+                        <option value="酸类">酸类</option>
+                        <option value="碱类">碱类</option>
+                        <option value="无机盐">无机盐</option>
+                        <option value="指示剂">指示剂</option>
+                        <option value="其他">其他</option>
+                    </select>
+                    <select id="reagentFilterStatus">
+                        <option value="">全状态</option>
+                        <option value="正常">正常</option>
+                        <option value="不足">库存不足</option>
+                        <option value="临近过期">临近过期</option>
+                        <option value="过期">已过期</option>
+                        <option value="报废">已报废</option>
+                    </select>
+                    <input type="text" id="reagentFilterKeyword" placeholder="搜索试剂名称/编号">
+                </div>
+                <div class="plant-list" id="reagentList"></div>
+            </section>
+
+            <!-- 试剂日志 -->
+            <section id="reagentLogs" class="tab-content">
+                <div class="section-header">
+                    <h2>试剂操作日志</h2>
+                </div>
+                <div class="filters">
+                    <select id="reagentLogFilterType">
+                        <option value="">全部类型</option>
+                        <option value="领用">领用</option>
+                        <option value="归还">归还</option>
+                        <option value="报废">报废</option>
+                    </select>
+                </div>
+                <div class="log-list" id="reagentLogList"></div>
+            </section>
+
+            <!-- 操作日志 -->
+            <section id="operationLogs" class="tab-content">
+                <div class="section-header">
+                    <h2>系统操作日志</h2>
+                </div>
+                <div class="filters">
+                    <select id="opLogFilterModule">
+                        <option value="">全部模块</option>
+                        <option value="绿植品类">绿植品类</option>
+                        <option value="绿植档案">绿植档案</option>
+                        <option value="养护任务">养护任务</option>
+                        <option value="试剂管理">试剂管理</option>
+                    </select>
+                    <select id="opLogFilterType">
+                        <option value="">全部操作</option>
+                        <option value="新增">新增</option>
+                        <option value="修改">修改</option>
+                        <option value="删除">删除</option>
+                        <option value="领用">领用</option>
+                        <option value="归还">归还</option>
+                        <option value="报废">报废</option>
+                    </select>
+                </div>
+                <div class="log-list" id="operationLogList"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 品类模态框 -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="categoryModalTitle">添加品类</h3>
+                <span class="close" onclick="closeCategoryModal()">&times;</span>
+            </div>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label>品类名称 <span class="required">*</span></label>
+                    <input type="text" id="categoryName" placeholder="请输入品类名称" required>
+                </div>
+                <div class="form-group">
+                    <label>品类类型 <span class="required">*</span></label>
+                    <select id="categoryType" required>
+                        <option value="观叶类">观叶类</option>
+                        <option value="开花类">开花类</option>
+                        <option value="多肉类">多肉类</option>
+                        <option value="藤本类">藤本类</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>描述</label>
+                    <textarea id="categoryDesc" placeholder="请输入品类描述"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeCategoryModal()">取消</button>
+                    <button type="submit" class="btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 绿植档案模态框 -->
+    <div class="modal" id="plantModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="plantModalTitle">添加绿植档案</h3>
+                <span class="close" onclick="closePlantModal()">&times;</span>
+            </div>
+            <form id="plantForm">
+                <div class="form-group">
+                    <label>绿植名称 <span class="required">*</span></label>
+                    <input type="text" id="plantName" placeholder="请输入绿植名称" required>
+                </div>
+                <div class="form-group">
+                    <label>品种编号 <span class="required">*</span></label>
+                    <input type="text" id="plantCode" placeholder="请输入品种编号" required>
+                </div>
+                <div class="form-group">
+                    <label>所属品类 <span class="required">*</span></label>
+                    <select id="plantCategory" required></select>
+                </div>
+                <div class="form-group">
+                    <label>摆放区域 <span class="required">*</span></label>
+                    <select id="plantArea" required>
+                        <option value="教学楼">教学楼</option>
+                        <option value="办公楼">办公楼</option>
+                        <option value="图书馆">图书馆</option>
+                        <option value="实验室">实验室</option>
+                        <option value="宿舍区">宿舍区</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>养护周期 <span class="required">*</span></label>
+                    <select id="plantCycle" required>
+                        <option value="3天">3天</option>
+                        <option value="7天">7天</option>
+                        <option value="14天">14天</option>
+                        <option value="30天">30天</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>盆土状态</label>
+                    <select id="plantSoilStatus">
+                        <option value="湿润">湿润</option>
+                        <option value="适中">适中</option>
+                        <option value="干燥">干燥</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>健康状态</label>
+                    <select id="plantHealthStatus">
+                        <option value="健康">健康</option>
+                        <option value="良好">良好</option>
+                        <option value="需养护">需养护</option>
+                        <option value="枯萎">枯萎</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>上次养护日期</label>
+                    <input type="date" id="plantLastCareDate">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closePlantModal()">取消</button>
+                    <button type="submit" class="btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 养护任务模态框 -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="taskModalTitle">养护任务登记</h3>
+                <span class="close" onclick="closeTaskModal()">&times;</span>
+            </div>
+            <form id="taskForm">
+                <input type="hidden" id="taskType">
+                <div class="form-group">
+                    <label>选择绿植 <span class="required">*</span></label>
+                    <select id="taskPlant" required></select>
+                </div>
+                <div class="form-group">
+                    <label>当前绿植状态</label>
+                    <input type="text" id="taskPlantStatus" readonly>
+                </div>
+                <div class="form-group">
+                    <label>养护人 <span class="required">*</span></label>
+                    <input type="text" id="taskOperator" placeholder="请输入养护人姓名" required>
+                </div>
+                <div class="form-group">
+                    <label>养护日期</label>
+                    <input type="date" id="taskDate">
+                </div>
+                <div class="form-group" id="taskWaterGroup">
+                    <label>浇水量 (mL)</label>
+                    <input type="number" id="taskWaterAmount" placeholder="请输入浇水量" min="0" step="10">
+                </div>
+                <div class="form-group" id="taskTrimGroup">
+                    <label>肥料类型</label>
+                    <select id="taskFertilizerType">
+                        <option value="">无</option>
+                        <option value="复合肥">复合肥</option>
+                        <option value="氮肥">氮肥</option>
+                        <option value="磷肥">磷肥</option>
+                        <option value="钾肥">钾肥</option>
+                        <option value="有机肥料">有机肥料</option>
+                    </select>
+                </div>
+                <div class="form-group" id="taskPestGroup">
+                    <label>病虫害类型</label>
+                    <select id="taskPestType">
+                        <option value="">未知">未知</option>
+                        <option value="蚜虫">蚜虫</option>
+                        <option value="红蜘蛛">红蜘蛛</option>
+                        <option value="白粉病">白粉病</option>
+                        <option value="黑斑病">黑斑病</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group" id="taskPestGroup2">
+                    <label>处理方式</label>
+                    <select id="taskPestMethod">
+                        <option value="修剪">修剪病叶</option>
+                        <option value="喷药">喷药治疗</option>
+                        <option value="隔离">隔离处理</option>
+                        <option value="其他">其他方法</option>
+                    </select>
+                </div>
+                <div class="form-group" id="taskWitherGroup">
+                    <label>枯萎原因 <span class="required">*</span></label>
+                    <select id="taskWitherReason" required>
+                        <option value="自然枯萎">自然枯萎</option>
+                        <option value="缺水">缺水枯死</option>
+                        <option value="病虫害">病虫害导致</option>
+                        <option value="过度浇水">过度浇水</option>
+                        <option value="环境不适">环境不适</option>
+                        <option value="其他">其他原因</option>
+                    </select>
+                </div>
+                <div class="form-group" id="taskWitherGroup2">
+                    <label>处理方式 <span class="required">*</span></label>
+                    <select id="taskWitherMethod" required>
+                        <option value="修剪">修剪枯枝</option>
+                        <option value="抢救">尝试抢救</option>
+                        <option value="淘汰">彻底淘汰</option>
+                        <option value="移植">移植处理</option>
+                    </select>
+                </div>
+                <div class="form-group" id="taskWitherGroup3">
+                    <label>审批人</label>
+                    <input type="text" id="taskApprover" placeholder="请输入审批人姓名">
+                </div>
+                <div class="form-group">
+                    <label>备注记录</label>
+                    <textarea id="taskRemark" placeholder="请输入养护备注"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeTaskModal()">取消</button>
+                    <button type="submit" class="btn-primary">确认登记</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 提示模态框 -->
+    <div class="modal" id="alertModal">
+        <div class="modal-content alert-content">
+            <div class="alert-icon" id="alertIcon">ℹ️</div>
+            <h3 id="alertTitle">提示</h3>
+            <p id="alertMessage">操作成功</p>
+            <button class="btn-primary" onclick="closeAlertModal()">确定</button>
+        </div>
+    </div>
+
+    <!-- 试剂模态框 -->
+    <div class="modal" id="reagentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="reagentModalTitle">添加试剂</h3>
+                <span class="close" onclick="closeReagentModal()">&times;</span>
+            </div>
+            <form id="reagentForm">
+                <div class="form-group">
+                    <label>试剂名称 <span class="required">*</span></label>
+                    <input type="text" id="reagentName" placeholder="请输入试剂名称" required>
+                </div>
+                <div class="form-group">
+                    <label>试剂编号 <span class="required">*</span></label>
+                    <input type="text" id="reagentCode" placeholder="请输入试剂编号" required>
+                </div>
+                <div class="form-group">
+                    <label>试剂类别 <span class="required">*</span></label>
+                    <select id="reagentCategory" required>
+                        <option value="有机溶剂">有机溶剂</option>
+                        <option value="酸类">酸类</option>
+                        <option value="碱类">碱类</option>
+                        <option value="无机盐">无机盐</option>
+                        <option value="指示剂">指示剂</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>计量单位 <span class="required">*</span></label>
+                    <select id="reagentUnit" required>
+                        <option value="mL">mL</option>
+                        <option value="g">g</option>
+                        <option value="L">L</option>
+                        <option value="kg">kg</option>
+                        <option value="瓶">瓶</option>
+                        <option value="支">支</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>总数量 <span class="required">*</span></label>
+                    <input type="number" id="reagentTotalQty" placeholder="请输入总数量" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>存放位置</label>
+                    <input type="text" id="reagentLocation" placeholder="请输入存放位置">
+                </div>
+                <div class="form-group">
+                    <label>供应商</label>
+                    <input type="text" id="reagentSupplier" placeholder="请输入供应商">
+                </div>
+                <div class="form-group">
+                    <label>有效期至</label>
+                    <input type="date" id="reagentExpireDate">
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="reagentRemark" placeholder="请输入备注"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeReagentModal()">取消</button>
+                    <button type="submit" class="btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 试剂操作模态框（领用/归还/报废） -->
+    <div class="modal" id="reagentOpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="reagentOpModalTitle">试剂操作</h3>
+                <span class="close" onclick="closeReagentOpModal()">&times;</span>
+            </div>
+            <form id="reagentOpForm">
+                <input type="hidden" id="reagentOpType">
+                <input type="hidden" id="reagentOpId">
+                <div class="form-group">
+                    <label>试剂名称</label>
+                    <input type="text" id="reagentOpName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>当前可用数量</label>
+                    <input type="text" id="reagentOpCurrentQty" readonly>
+                </div>
+                <div class="form-group">
+                    <label id="reagentOpQtyLabel">领用数量 <span class="required">*</span></label>
+                    <input type="number" id="reagentOpQty" placeholder="请输入数量" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label id="reagentOpOperatorLabel">领用人 <span class="required">*</span></label>
+                    <input type="text" id="reagentOpOperator" placeholder="请输入领用人姓名" required>
+                </div>
+                <div class="form-group" id="reagentOpPurposeGroup">
+                    <label>领用用途</label>
+                    <input type="text" id="reagentOpPurpose" placeholder="请输入领用用途">
+                </div>
+                <div class="form-group" id="reagentOpReasonGroup">
+                    <label>报废原因 <span class="required">*</span></label>
+                    <input type="text" id="reagentOpReason" placeholder="请输入报废原因">
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    <textarea id="reagentOpRemark" placeholder="请输入备注"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeReagentOpModal()">取消</button>
+                    <button type="submit" class="btn-primary">确认</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/categories.js"></script>
+    <script src="js/plants.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/logs.js"></script>
+    <script src="js/operationLog.js"></script>
+    <script src="js/reagents.js"></script>
+    <script src="js/reagentLogs.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
