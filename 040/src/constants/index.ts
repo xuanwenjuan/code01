@@ -8,6 +8,7 @@ import type {
   AlertLevelLabelMap,
   AlertStatusLabelMap,
   LoadLevelLabelMap,
+  OperationType,
 } from '@/types'
 
 export const DEVICE_STATUS_MAP: StatusLabelMap = {
@@ -50,6 +51,17 @@ export const OPERATION_TYPE_MAP: OperationTypeLabelMap = {
   create_device: '创建设备',
   delete_device: '删除设备',
   update_device: '更新设备信息',
+}
+
+export const OPERATION_TYPE_COLORS: Record<OperationType, string> = {
+  update_power: 'blue',
+  dispatch_workorder: 'orange',
+  add_inspection: 'green',
+  device_online: 'cyan',
+  device_offline: 'default',
+  create_device: 'purple',
+  delete_device: 'red',
+  update_device: 'geekblue',
 }
 
 export const ALERT_TYPE_MAP: AlertTypeLabelMap = {
@@ -118,14 +130,14 @@ export const ALERT_LEVEL_COLORS: Record<string, string> = {
 }
 
 export const LOAD_THRESHOLDS = {
-  LOW: 0.3,
-  HIGH: 0.8,
-  OVERLOAD: 1.0,
+  low: 0.3,
+  high: 0.8,
+  overload: 1.0,
 }
 
 export const VOLTAGE_THRESHOLDS = {
-  MIN: 200,
-  MAX: 240,
+  low: 200,
+  high: 240,
 }
 
 export const CHART_COLORS = [

@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useHospitalStore } from '@/stores/hospital'
-import type { Doctor, DoctorStatus, DoctorTitle } from '@/types'
+import type { Doctor, DoctorStatus, DoctorTitle, RegistrationFee } from '@/types'
 import DoctorDialog from '@/components/DoctorDialog.vue'
 
 const store = useHospitalStore()
@@ -37,6 +37,18 @@ const filteredDoctors = computed(() => {
   return result
 })
 
+const getDoctorFee = (doctor: Doctor): RegistrationFee => {
+  return store.calculateRegistrationFee(doctor.title, doctor.title === '专家')
+}
+
+const getDoctorSlotsCount = (doctorId: string) => {
+  const doctorSlots = store.slots.filter(s => s.doctorId === doctorId)
+  return {
+    total: doctorSlots.length,
+    reserved: doctorSlots.reduce((sum, s) => sum + s.reserved, 0)
+  }
+}
+
 const dialogVisible = ref(false)
 const editingDoctor = ref<Doctor | null>(null)
 
@@ -57,12 +69,16 @@ const handleEdit = (doctor: Doctor) => {
 }
 
 const handleChangeStatus = async (doctor: Doctor, status: DoctorStatus) => {
+  const doctorSlots = store.slots.filter(s => s.doctorId === doctor.id)
+  const hasReservedSlots = doctorSlots.some(s => s.reserved > 0)
+  
+  let message = `确定将医生 ${doctor.name} 的状态改为 ${statusMap[status].label}？`
+  if (status === 'stop' && hasReservedSlots) {
+    message = `医生 ${doctor.name} 存在已挂号患者，停诊后将自动锁定未挂号号源。确定执行？`
+  }
+  
   try {
-    await ElMessageBox.confirm(
-      `确定将医生 ${doctor.name} 的状态改为 ${statusMap[status].label}？`,
-      '确认操作',
-      { type: 'warning' }
-    )
+    await ElMessageBox.confirm(message, '确认操作', { type: 'warning' })
     await store.updateDoctorStatus(doctor.id, status)
     ElMessage.success('状态更新成功')
   } catch {
@@ -78,6 +94,16 @@ const handleDepartmentChange = (val: string | null) => {
   store.setSelectedDepartment(val)
 }
 
+const activeFilterCount = computed(() => {
+  let count = 0
+  if (store.selectedHospital) count++
+  if (store.selectedDepartment) count++
+  if (filterTitle.value) count++
+  if (filterStatus.value) count++
+  if (searchKeyword.value) count++
+  return count
+})
+
 const handleReset = () => {
   searchKeyword.value = ''
   filterTitle.value = ''
@@ -92,7 +118,12 @@ const handleReset = () => {
     <el-card>
       <template #header>
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: 600; font-size: 16px;">科室与医生管理</span>
+          <span style="font-weight: 600; font-size: 16px;">
+            科室与医生管理
+            <el-tag v-if="activeFilterCount > 0" type="info" size="small" style="margin-left: 8px;">
+              {{ activeFilterCount }} 个筛选条件
+            </el-tag>
+          </span>
           <el-button type="primary" @click="handleAdd">
             <el-icon><Plus /></el-icon>
             添加医生
@@ -125,6 +156,7 @@ const handleReset = () => {
             clearable
             style="width: 150px"
             @change="handleDepartmentChange"
+            :disabled="!store.selectedHospital"
           >
             <el-option
               v-for="d in store.filteredDepartments"
@@ -195,6 +227,24 @@ const handleReset = () => {
         </el-table-column>
         <el-table-column prop="hospitalName" label="院区" width="100" />
         <el-table-column prop="departmentName" label="科室" width="100" />
+        <el-table-column label="挂号费" width="130">
+          <template #default="{ row }">
+            <div>
+              <span style="font-weight: 600; color: #F56C6C;">¥{{ getDoctorFee(row).totalFee }}</span>
+              <div v-if="getDoctorFee(row).expertPremium > 0" style="font-size: 11px; color: #E6A23C;">
+                含专家费¥{{ getDoctorFee(row).expertPremium }}
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="号源统计" width="120">
+          <template #default="{ row }">
+            <div style="text-align: center;">
+              <div>总排班: {{ getDoctorSlotsCount(row.id).total }}</div>
+              <div style="color: #606266; font-size: 12px;">已挂号: {{ getDoctorSlotsCount(row.id).reserved }}</div>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column prop="specialty" label="擅长领域" show-overflow-tooltip />
         <el-table-column prop="status" label="出诊状态" width="120">
           <template #default="{ row }">

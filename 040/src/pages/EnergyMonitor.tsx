@@ -1,15 +1,47 @@
-import React, { useMemo } from 'react'
-import { Card, Row, Col, Tabs, List, Tag, Space, Typography, Statistic } from 'antd'
-import { ThunderboltOutlined, WarningOutlined, CheckCircleOutlined, RiseOutlined, FallOutlined } from '@ant-design/icons'
+import React, { useMemo, useState, useCallback } from 'react'
+import {
+  Card,
+  Row,
+  Col,
+  Tabs,
+  List,
+  Tag,
+  Space,
+  Typography,
+  Statistic,
+  Button,
+  message,
+  Badge,
+} from 'antd'
+import {
+  ThunderboltOutlined,
+  WarningOutlined,
+  CheckCircleOutlined,
+  RiseOutlined,
+  PoweroffOutlined,
+  ReloadOutlined,
+} from '@ant-design/icons'
 import ReactECharts from 'echarts-for-react'
-import type { DailyEnergySummary, Alert, EnergyData, Device } from '@/types'
+import type { DailyEnergySummary, Alert, EnergyData, Device, AlertLevel, AlertStatus } from '@/types'
 import { AREA_TYPE_MAP, AREA_COLORS, ALERT_LEVEL_COLORS } from '@/constants'
-import { AlertTypeTag, AlertLevelTag, AlertStatusTag, DeviceStatusTag } from '@/components/StatusTags'
+import { AlertTypeTag, AlertLevelTag, AlertStatusTag, DeviceStatusTag, LoadRateTag } from '@/components/StatusTags'
 import AlertModal from '@/components/modals/AlertModal'
 import { useDataStore } from '@/store/dataStore'
 import dayjs from 'dayjs'
 
 const { Text, Title } = Typography
+
+interface AlertTabItem {
+  key: string
+  label: React.ReactNode
+  filter: (alert: Alert) => boolean
+}
+
+interface TrendChartTooltipParam {
+  name: string
+  seriesName: string
+  value: number
+}
 
 const EnergyMonitor: React.FC = () => {
   const {
@@ -21,30 +53,41 @@ const EnergyMonitor: React.FC = () => {
     isAlertModalOpen,
     openAlertModal,
     closeAlertModal,
+    toggleDeviceStatus,
+    resolveAlert,
+    acknowledgeAlert,
+    updateStatistics,
   } = useDataStore()
 
+  const [activeTab, setActiveTab] = useState<string>('all')
+  const [refreshing, setRefreshing] = useState<boolean>(false)
+
   const activeAlerts = useMemo(
-    () => alerts.filter(a => a.status === 'active').sort((a, b) => {
-      const levelOrder = { high: 0, medium: 1, low: 2 }
-      return levelOrder[a.level] - levelOrder[b.level]
-    }),
+    () =>
+      alerts
+        .filter((a: Alert) => a.status === 'active')
+        .sort((a: Alert, b: Alert) => {
+          const levelOrder: Record<AlertLevel, number> = { high: 0, medium: 1, low: 2 }
+          return levelOrder[a.level] - levelOrder[b.level]
+        }),
     [alerts]
   )
 
   const topDevices = useMemo(() => {
     return [...devices]
-      .filter(d => d.status === 'online')
-      .sort((a, b) => b.currentPower - a.currentPower)
+      .filter((d: Device) => d.status === 'online')
+      .sort((a: Device, b: Device) => b.currentPower - a.currentPower)
       .slice(0, 5)
   }, [devices])
 
   const areaEnergyTrend = useMemo(() => {
     const grouped: Record<string, { date: string; total: number }[]> = {}
     const sortedSummaries = [...dailyEnergySummaries].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      (a: DailyEnergySummary, b: DailyEnergySummary) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime()
     )
 
-    sortedSummaries.forEach(summary => {
+    sortedSummaries.forEach((summary: DailyEnergySummary) => {
       if (!grouped[summary.areaId]) {
         grouped[summary.areaId] = []
       }
@@ -58,7 +101,7 @@ const EnergyMonitor: React.FC = () => {
   }, [dailyEnergySummaries])
 
   const areas = Object.keys(areaEnergyTrend)
-  const dates = areaEnergyTrend[areas[0]]?.map(item => item.date) || []
+  const dates = areaEnergyTrend[areas[0]]?.map((item) => item.date) || []
 
   const trendChartOption = {
     title: {
@@ -68,8 +111,8 @@ const EnergyMonitor: React.FC = () => {
     },
     tooltip: {
       trigger: 'axis',
-      formatter: (params: { name: string; seriesName: string; value: number }[]) => {
-        const lines = params.map(p => `${p.seriesName}: ${p.value.toFixed(2)} kWh`)
+      formatter: (params: TrendChartTooltipParam[]) => {
+        const lines = params.map((p) => `${p.seriesName}: ${p.value.toFixed(2)} kWh`)
         return `${params[0]?.name}<br/>${lines.join('<br/>')}`
       },
     },
@@ -86,17 +129,17 @@ const EnergyMonitor: React.FC = () => {
     },
     xAxis: {
       type: 'category',
-      data: dates.map(d => dayjs(d).format('MM-DD')),
+      data: dates.map((d) => dayjs(d).format('MM-DD')),
     },
     yAxis: {
       type: 'value',
       name: 'kWh',
     },
-    series: areas.map(areaId => ({
+    series: areas.map((areaId) => ({
       name: AREA_TYPE_MAP[areaId.split('_')[1] as keyof typeof AREA_TYPE_MAP] || areaId,
       type: 'line' as const,
       smooth: true,
-      data: areaEnergyTrend[areaId]?.map(item => item.total) || [],
+      data: areaEnergyTrend[areaId]?.map((item) => item.total) || [],
       lineStyle: {
         width: 2,
       },
@@ -108,7 +151,7 @@ const EnergyMonitor: React.FC = () => {
 
   const todayByArea = useMemo(() => {
     const today = new Date().toISOString().split('T')[0]
-    return dailyEnergySummaries.filter(s => s.date === today)
+    return dailyEnergySummaries.filter((s: DailyEnergySummary) => s.date === today)
   }, [dailyEnergySummaries])
 
   const pieChartOption = {
@@ -152,7 +195,7 @@ const EnergyMonitor: React.FC = () => {
         labelLine: {
           show: false,
         },
-        data: todayByArea.map(s => ({
+        data: todayByArea.map((s: DailyEnergySummary) => ({
           value: s.totalEnergy,
           name: s.areaName,
           itemStyle: { color: AREA_COLORS[s.areaId.split('_')[1]] || '#1890ff' },
@@ -164,16 +207,20 @@ const EnergyMonitor: React.FC = () => {
   const recentHourData = useMemo(() => {
     const now = Date.now()
     const oneHourAgo = now - 60 * 60 * 1000
-    return energyData.filter(d => new Date(d.timestamp).getTime() > oneHourAgo)
+    return energyData.filter((d: EnergyData) => new Date(d.timestamp).getTime() > oneHourAgo)
   }, [energyData])
 
-  const averagePower = recentHourData.length > 0
-    ? recentHourData.reduce((sum, d) => sum + d.power, 0) / recentHourData.length
-    : 0
+  const averagePower =
+    recentHourData.length > 0
+      ? recentHourData.reduce((sum: number, d: EnergyData) => sum + d.power, 0) / recentHourData.length
+      : 0
 
-  const totalEnergy = recentHourData.reduce((sum, d) => sum + d.energyConsumption, 0)
+  const totalEnergy = recentHourData.reduce(
+    (sum: number, d: EnergyData) => sum + d.energyConsumption,
+    0
+  )
 
-  const tabItems = [
+  const tabItems: AlertTabItem[] = [
     {
       key: 'all',
       label: <span>全部告警 ({activeAlerts.length})</span>,
@@ -184,7 +231,7 @@ const EnergyMonitor: React.FC = () => {
       label: (
         <span>
           <Tag color={ALERT_LEVEL_COLORS.high}>高</Tag>
-          高优先级 ({activeAlerts.filter(a => a.level === 'high').length})
+          高优先级 ({activeAlerts.filter((a: Alert) => a.level === 'high').length})
         </span>
       ),
       filter: (a: Alert) => a.level === 'high',
@@ -194,7 +241,7 @@ const EnergyMonitor: React.FC = () => {
       label: (
         <span>
           <Tag color={ALERT_LEVEL_COLORS.medium}>中</Tag>
-          中优先级 ({activeAlerts.filter(a => a.level === 'medium').length})
+          中优先级 ({activeAlerts.filter((a: Alert) => a.level === 'medium').length})
         </span>
       ),
       filter: (a: Alert) => a.level === 'medium',
@@ -204,24 +251,77 @@ const EnergyMonitor: React.FC = () => {
       label: (
         <span>
           <Tag color={ALERT_LEVEL_COLORS.low}>低</Tag>
-          低优先级 ({activeAlerts.filter(a => a.level === 'low').length})
+          低优先级 ({activeAlerts.filter((a: Alert) => a.level === 'low').length})
         </span>
       ),
       filter: (a: Alert) => a.level === 'low',
     },
   ]
 
-  const [activeTab, setActiveTab] = React.useState('all')
-
   const filteredAlerts = activeAlerts.filter(
-    tabItems.find(t => t.key === activeTab)?.filter || (() => true)
+    tabItems.find((t) => t.key === activeTab)?.filter || (() => true)
   )
+
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true)
+    updateStatistics()
+    setTimeout(() => {
+      setRefreshing(false)
+      message.success('数据已刷新')
+    }, 500)
+  }, [updateStatistics])
+
+  const handleToggleDeviceStatus = useCallback(
+    (device: Device) => {
+      toggleDeviceStatus(device.id, '系统管理员')
+      const action = device.status === 'offline' ? '上线' : '下线'
+      message.success(`${device.name} 已${action}`)
+    },
+    [toggleDeviceStatus]
+  )
+
+  const handleAcknowledgeAlert = useCallback(
+    (alert: Alert) => {
+      acknowledgeAlert(alert.id, '系统管理员')
+      message.success('告警已确认，工单已派发')
+    },
+    [acknowledgeAlert]
+  )
+
+  const handleResolveAlert = useCallback(
+    (alert: Alert) => {
+      resolveAlert(alert.id, '系统管理员', '问题已修复')
+      message.success('告警已解决')
+    },
+    [resolveAlert]
+  )
+
+  const alertsByStatus = useMemo(() => {
+    const statusCounts: Record<AlertStatus, number> = {
+      active: 0,
+      acknowledged: 0,
+      resolved: 0,
+    }
+    alerts.forEach((a: Alert) => {
+      statusCounts[a.status]++
+    })
+    return statusCounts
+  }, [alerts])
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}>
-          <Card style={{ height: '100%' }}>
+        <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+          <Card
+            style={{ height: '100%' }}
+            extra={
+              <Button
+                type="text"
+                icon={<ReloadOutlined spin={refreshing} />}
+                onClick={handleRefresh}
+              />
+            }
+          >
             <Statistic
               title={
                 <Space>
@@ -236,7 +336,7 @@ const EnergyMonitor: React.FC = () => {
             />
           </Card>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} md={8} lg={6} xl={4}>
           <Card style={{ height: '100%' }}>
             <Statistic
               title={
@@ -252,7 +352,7 @@ const EnergyMonitor: React.FC = () => {
             />
           </Card>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} md={8} lg={6} xl={4}>
           <Card style={{ height: '100%' }}>
             <Statistic
               title={
@@ -261,13 +361,19 @@ const EnergyMonitor: React.FC = () => {
                   <span>活动告警</span>
                 </Space>
               }
-              value={activeAlerts.length}
+              value={alertsByStatus.active}
               valueStyle={{ color: '#ff4d4f' }}
               prefix={<WarningOutlined />}
             />
+            <div style={{ marginTop: 8 }}>
+              <Space size={[12, 8]} wrap>
+                <Badge color="orange" text={`已确认: ${alertsByStatus.acknowledged}`} />
+                <Badge color="green" text={`已解决: ${alertsByStatus.resolved}`} />
+              </Space>
+            </div>
           </Card>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} md={8} lg={6} xl={4}>
           <Card style={{ height: '100%' }}>
             <Statistic
               title={
@@ -276,9 +382,38 @@ const EnergyMonitor: React.FC = () => {
                   <span>在线设备</span>
                 </Space>
               }
-              value={devices.filter(d => d.status === 'online').length}
+              value={devices.filter((d: Device) => d.status === 'online').length}
               suffix={`/ ${devices.length}`}
               valueStyle={{ color: '#52c41a' }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+          <Card style={{ height: '100%' }}>
+            <Statistic
+              title={
+                <Space>
+                  <PoweroffOutlined style={{ color: '#8c8c8c' }} />
+                  <span>离线设备</span>
+                </Space>
+              }
+              value={devices.filter((d: Device) => d.status === 'offline').length}
+              suffix={`/ ${devices.length}`}
+              valueStyle={{ color: '#8c8c8c' }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+          <Card style={{ height: '100%' }}>
+            <Statistic
+              title={
+                <Space>
+                  <WarningOutlined style={{ color: '#faad14' }} />
+                  <span>故障设备</span>
+                </Space>
+              }
+              value={devices.filter((d: Device) => d.status === 'fault').length}
+              valueStyle={{ color: '#faad14' }}
             />
           </Card>
         </Col>
@@ -314,9 +449,25 @@ const EnergyMonitor: React.FC = () => {
                 <List.Item
                   actions={[
                     <DeviceStatusTag key="status" status={device.status} />,
-                    <Tag key="power" color={device.currentPower > device.ratedPower * 0.9 ? 'red' : 'blue'}>
-                      {device.currentPower} kW / {device.ratedPower} kW
-                    </Tag>,
+                    <LoadRateTag
+                      key="load"
+                      loadRate={
+                        device.ratedPower > 0
+                          ? Math.round((device.currentPower / device.ratedPower) * 10000) / 100
+                          : 0
+                      }
+                      showProgress
+                    />,
+                    <Button
+                      key="toggle"
+                      type="link"
+                      size="small"
+                      icon={<PoweroffOutlined />}
+                      onClick={() => handleToggleDeviceStatus(device)}
+                      danger={device.status === 'online'}
+                    >
+                      {device.status === 'online' ? '下线' : '上线'}
+                    </Button>,
                   ]}
                 >
                   <List.Item.Meta
@@ -343,9 +494,7 @@ const EnergyMonitor: React.FC = () => {
                       <Space>
                         <Text type="secondary">{device.areaName}</Text>
                         <Text type="secondary">•</Text>
-                        <Text type="secondary">电压: {device.voltage}V</Text>
-                        <Text type="secondary">•</Text>
-                        <Text type="secondary">电流: {device.current}A</Text>
+                        <Text type="secondary">功率: {device.currentPower}kW / {device.ratedPower}kW</Text>
                       </Space>
                     }
                   />
@@ -395,9 +544,24 @@ const EnergyMonitor: React.FC = () => {
                       <Text type="secondary" style={{ fontSize: 12 }}>
                         {dayjs(alert.createTime).format('MM-DD HH:mm')}
                       </Text>
-                      <Tag color="blue" onClick={() => openAlertModal(alert)} style={{ cursor: 'pointer' }}>
-                        查看详情
-                      </Tag>
+                      <Space>
+                        <Button
+                          size="small"
+                          type="primary"
+                          onClick={() => handleAcknowledgeAlert(alert)}
+                        >
+                          确认
+                        </Button>
+                        <Button
+                          size="small"
+                          onClick={() => handleResolveAlert(alert)}
+                        >
+                          解决
+                        </Button>
+                        <Tag color="blue" onClick={() => openAlertModal(alert)} style={{ cursor: 'pointer' }}>
+                          详情
+                        </Tag>
+                      </Space>
                     </Space>
                   }
                 >
@@ -421,7 +585,7 @@ const EnergyMonitor: React.FC = () => {
       <AlertModal
         visible={isAlertModalOpen}
         alert={currentAlert}
-        device={currentAlert ? devices.find(d => d.id === currentAlert.deviceId) : undefined}
+        device={currentAlert ? devices.find((d: Device) => d.id === currentAlert.deviceId) : undefined}
         onClose={closeAlertModal}
       />
     </Space>

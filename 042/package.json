@@ -1,0 +1,34 @@
+{
+  "name": "enterprise-recruitment-system",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:analyze": "tsc && vite build --mode analyze",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "antd": "^5.12.0",
+    "zustand": "^4.4.7",
+    "proxy-memoize": "^2.0.4",
+    "echarts": "^5.4.3",
+    "echarts-for-react": "^3.0.2",
+    "dayjs": "^1.11.10",
+    "@ant-design/icons": "^5.2.6",
+    "mockjs": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/mockjs": "^1.0.10",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "sass": "^1.69.5",
+    "rollup-plugin-visualizer": "^5.12.0"
+  }
+}

@@ -51,13 +51,13 @@ const handleRegister = async () => {
   }
   
   if (props.slot) {
-    const success = await store.registerPatient(props.slot.id, patientName.value)
-    if (success) {
+    const result = await store.registerPatient(props.slot.id, { patientName: patientName.value })
+    if (result.success) {
       ElMessage.success('挂号成功')
       emit('success')
       emit('update:visible', false)
     } else {
-      ElMessage.error('号源不足，挂号失败')
+      ElMessage.error(result.message || '号源不足，挂号失败')
     }
   }
 }

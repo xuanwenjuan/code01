@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useHospitalStore } from '@/stores/hospital'
 import {
@@ -18,6 +18,20 @@ const route = useRoute()
 const store = useHospitalStore()
 
 const isCollapse = ref(false)
+const isMobile = ref(false)
+const mobileMenuOpen = ref(false)
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+  if (!isMobile.value) {
+    mobileMenuOpen.value = false
+  }
+}
+
+const asideWidth = computed(() => {
+  if (isMobile.value) return mobileMenuOpen.value ? '220px' : '0px'
+  return isCollapse.value ? '64px' : '220px'
+})
 
 const menuItems = [
   { path: '/dashboard', label: '数据看板', icon: DataAnalysis },
@@ -29,23 +43,54 @@ const menuItems = [
 
 onMounted(() => {
   store.init()
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
 })
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
+
+const toggleCollapse = () => {
+  if (isMobile.value) {
+    mobileMenuOpen.value = !mobileMenuOpen.value
+  } else {
+    isCollapse.value = !isCollapse.value
+  }
+}
 
 const handleMenuSelect = (path: string) => {
   router.push(path)
+  if (isMobile.value) {
+    mobileMenuOpen.value = false
+  }
+}
+
+const handleOverlayClick = () => {
+  mobileMenuOpen.value = false
 }
 </script>
 
 <template>
   <el-container class="app-container">
-    <el-aside :width="isCollapse ? '64px' : '220px'" class="app-aside">
+    <div 
+      v-if="isMobile && mobileMenuOpen" 
+      class="mobile-overlay" 
+      @click="handleOverlayClick"
+    />
+    
+    <el-aside 
+      :width="asideWidth" 
+      class="app-aside"
+      :class="{ 'mobile-open': isMobile && mobileMenuOpen }"
+    >
       <div class="logo">
         <el-icon size="32" color="#409EFF"><DataAnalysis /></el-icon>
-        <span v-if="!isCollapse" class="logo-text">智慧医院</span>
+        <span v-if="!isCollapse || isMobile" class="logo-text">智慧医院</span>
       </div>
       <el-menu
         :default-active="route.path"
-        :collapse="isCollapse"
+        :collapse="isCollapse && !isMobile"
         class="app-menu"
         background-color="#001529"
         text-color="#fff"
@@ -62,13 +107,15 @@ const handleMenuSelect = (path: string) => {
     <el-container>
       <el-header class="app-header">
         <div class="header-left">
-          <el-button text @click="isCollapse = !isCollapse">
-            <el-icon><component :is="isCollapse ? Expand : Fold" /></el-icon>
+          <el-button text @click="toggleCollapse">
+            <el-icon>
+              <component :is="(isMobile ? mobileMenuOpen : isCollapse) ? Expand : Fold" />
+            </el-icon>
           </el-button>
           <span class="title">智慧医院门诊挂号与排班管理系统</span>
         </div>
         <div class="header-right">
-          <el-tag type="info">当前用户：管理员</el-tag>
+          <el-tag type="info">管理员</el-tag>
         </div>
       </el-header>
       
