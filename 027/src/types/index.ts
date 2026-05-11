@@ -1,161 +1,191 @@
-export type DepartmentId = string
-export type DoctorId = string
-export type PatientId = string
-export type RegistrationId = string
-export type PrescriptionId = string
+export type RoomTypeId = string
+export type RoomId = string
+export type BookingId = string
+export type CheckInId = string
 export type OperationLogId = string
 export type UserId = string
-export type MedicineId = string
+export type FloorId = string
 
-export type TitleLevel = '主任医师' | '副主任医师' | '主治医师' | '住院医师' | '医士'
-export type VisitStatus = 'waiting' | 'ongoing' | 'completed' | 'cancelled'
-export type WeekDay = 1 | 2 | 3 | 4 | 5 | 6 | 7
-export type TimeSlot = 'morning' | 'afternoon'
-export type UserRole = 'admin' | 'doctor' | 'nurse' | 'reception'
-export type TargetType = 'department' | 'doctor' | 'registration' | 'prescription' | 'schedule'
+export type RoomTypeCategory = '标准间' | '大床房' | '双床房' | '套房' | '豪华套房' | '行政套房'
+export type RoomStatus = 'vacant' | 'reserved' | 'occupied' | 'cleaning' | 'maintenance'
+export type BookingStatus = 'pending' | 'confirmed' | 'checked_in' | 'checked_out' | 'cancelled' | 'no_show'
+export type FloorStatus = 'active' | 'inactive'
+export type UserRole = 'admin' | 'front_desk' | 'housekeeping' | 'manager'
+export type TargetType = 'room_type' | 'room' | 'floor' | 'booking' | 'check_in'
 export type OperationType = 
-  | 'create_department' | 'update_department' | 'delete_department'
-  | 'create_doctor' | 'update_doctor' | 'delete_doctor'
-  | 'update_schedule'
-  | 'create_registration' | 'cancel_registration'
-  | 'start_visit' | 'complete_visit'
-  | 'create_prescription'
-export type PrescriptionStatus = 'pending' | 'issued' | 'dispensed'
-export type DepartmentStatus = 'active' | 'inactive'
-export type DoctorStatus = 'on_duty' | 'off_duty' | 'leave'
-export type ScheduleStatus = 'available' | 'unavailable'
-export type Gender = 'male' | 'female'
-export type FeeType = 'registration' | 'medicine' | 'examination' | 'treatment'
+  | 'create_room_type' | 'update_room_type' | 'delete_room_type'
+  | 'create_room' | 'update_room' | 'delete_room' | 'update_room_status'
+  | 'create_floor' | 'update_floor' | 'delete_floor'
+  | 'create_booking' | 'update_booking' | 'cancel_booking'
+  | 'check_in' | 'check_out' | 'force_check_out'
+  | 'update_price'
+export type PaymentMethod = 'cash' | 'card' | 'wechat' | 'alipay'
 export type PaymentStatus = 'pending' | 'paid' | 'refunded'
+export type Gender = 'male' | 'female'
+export type BedType = 'single' | 'double' | 'twin' | 'king' | 'queen'
 
-export interface TitleFeeConfig {
-  title: TitleLevel
-  registrationFee: number
-}
-
-export interface Payment {
-  id: string
-  registrationId: RegistrationId
-  prescriptionId?: PrescriptionId
-  feeType: FeeType
-  amount: number
-  status: PaymentStatus
-  paidAt?: string
-  createdAt: string
-  updatedAt: string
-}
-
-export interface Medicine {
-  id: MedicineId
+export interface RoomType {
+  id: RoomTypeId
   name: string
-  specification: string
-  price: number
-  unit: string
-  manufacturer: string
-  category: string
-}
-
-export interface Department {
-  id: DepartmentId
-  name: string
+  category: RoomTypeCategory
   description: string
-  location: string
-  phone: string
-  status: DepartmentStatus
+  pricePerNight: number
+  originalPrice: number
+  bedType: BedType
+  bedCount: number
+  maxGuests: number
+  roomSize: number
+  facilities: string[]
+  amenities: string[]
+  images: string[]
+  totalRooms: number
+  availableRooms: number
+  isActive: boolean
   createdAt: string
   updatedAt: string
 }
 
-export interface Doctor {
-  id: DoctorId
-  name: string
-  gender: Gender
-  age: number
-  title: TitleLevel
-  departmentId: DepartmentId
-  phone: string
-  email: string
-  specialty: string
-  education: string
-  avatar: string
-  status: DoctorStatus
+export interface Floor {
+  id: FloorId
+  floorNumber: number
+  floorName: string
+  description: string
+  totalRooms: number
+  availableRooms: number
+  status: FloorStatus
   createdAt: string
   updatedAt: string
 }
 
-export interface Schedule {
-  doctorId: DoctorId
-  departmentId: DepartmentId
-  weekDay: WeekDay
-  timeSlot: TimeSlot
-  maxPatients: number
-  status: ScheduleStatus
+export interface Room {
+  id: RoomId
+  roomNumber: string
+  roomTypeId: RoomTypeId
+  roomTypeName: string
+  floorId: FloorId
+  floorNumber: number
+  status: RoomStatus
+  pricePerNight: number
+  originalPrice: number
+  maxGuests: number
+  bedType: BedType
+  facilities: string[]
+  hasWifi: boolean
+  hasAircon: boolean
+  hasTv: boolean
+  hasMinibar: boolean
+  hasSafe: boolean
+  notes: string
+  lastCleanedAt?: string
+  lastMaintenanceAt?: string
+  createdAt: string
+  updatedAt: string
 }
 
-export interface Patient {
-  id: PatientId
+export interface Guest {
+  id: string
   name: string
   gender: Gender
   age: number
   phone: string
   idCard: string
+  email: string
   address: string
-  emergencyContact: string
-  emergencyPhone: string
-  medicalHistory: string
+  company: string
+  isVIP: boolean
+  vipLevel?: number
+  totalStays: number
+  totalSpent: number
   createdAt: string
   updatedAt: string
 }
 
-export interface Registration {
-  id: RegistrationId
-  patientId: PatientId
-  patientName: string
-  doctorId: DoctorId
-  doctorName: string
-  departmentId: DepartmentId
-  departmentName: string
-  scheduleDate: string
-  timeSlot: TimeSlot
-  visitNumber: number
-  status: VisitStatus
-  registrationFee: number
-  totalFee: number
+export interface BookingGuest {
+  guestId: string
+  name: string
+  idCard: string
+  phone: string
+  isPrimary: boolean
+}
+
+export interface Booking {
+  id: BookingId
+  bookingNo: string
+  guestId: string
+  guestName: string
+  guestPhone: string
+  guests: BookingGuest[]
+  roomId: RoomId
+  roomNumber: string
+  roomTypeId: RoomTypeId
+  roomTypeName: string
+  checkInDate: string
+  checkOutDate: string
+  nights: number
+  expectedCheckIn?: string
+  actualCheckIn?: string
+  actualCheckOut?: string
+  adultCount: number
+  childCount: number
+  roomPricePerNight: number
+  totalRoomPrice: number
+  additionalFees: number
+  totalAmount: number
+  paidAmount: number
+  paymentMethod?: PaymentMethod
   paymentStatus: PaymentStatus
-  actualVisitTime?: string
-  completeTime?: string
-  symptoms?: string
-  diagnosis?: string
+  status: BookingStatus
+  specialRequests: string
+  source: string
+  operatorName: string
+  isOverdue: boolean
+  cancelledAt?: string
+  cancelReason?: string
+  checkInId?: CheckInId
   createdAt: string
   updatedAt: string
 }
 
-export interface PrescriptionItem {
+export interface CheckIn {
+  id: CheckInId
+  checkInNo: string
+  bookingId?: BookingId
+  roomId: RoomId
+  roomNumber: string
+  roomTypeId: RoomTypeId
+  roomTypeName: string
+  guests: BookingGuest[]
+  checkInDate: string
+  expectedCheckOutDate: string
+  actualCheckOutDate?: string
+  nights: number
+  adultCount: number
+  childCount: number
+  roomPricePerNight: number
+  totalRoomPrice: number
+  additionalFees: number
+  totalAmount: number
+  paidAmount: number
+  paymentMethod?: PaymentMethod
+  paymentStatus: PaymentStatus
+  depositAmount: number
+  keyCardNumber: string
+  specialRequests: string
+  operatorName: string
+  isOverdue: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface AdditionalFee {
   id: string
-  medicineName: string
-  specification: string
-  dosage: string
-  usage: string
+  checkInId: CheckInId
+  description: string
+  amount: number
   quantity: number
-  unit: string
-  price: number
-}
-
-export interface Prescription {
-  id: PrescriptionId
-  registrationId: RegistrationId
-  patientId: PatientId
-  patientName: string
-  doctorId: DoctorId
-  doctorName: string
-  departmentId: DepartmentId
-  departmentName: string
-  items: PrescriptionItem[]
-  totalPrice: number
-  remark: string
-  status: PrescriptionStatus
+  unitPrice: number
+  operatorName: string
   createdAt: string
-  updatedAt: string
 }
 
 export interface OperationLog {
@@ -180,4 +210,35 @@ export interface User {
   name: string
   role: UserRole
   avatar: string
+  department: string
+  phone: string
+}
+
+export interface RoomStatusCount {
+  vacant: number
+  reserved: number
+  occupied: number
+  cleaning: number
+  maintenance: number
+}
+
+export interface BookingFilterParams {
+  roomTypeId?: string
+  roomId?: string
+  status?: BookingStatus
+  guestName?: string
+  checkInDateFrom?: string
+  checkInDateTo?: string
+  checkOutDateFrom?: string
+  checkOutDateTo?: string
+  operatorName?: string
+  isOverdue?: boolean
+}
+
+export interface RoomFilterParams {
+  roomTypeId?: string
+  floorId?: string
+  status?: RoomStatus
+  roomNumber?: string
+  priceRange?: [number, number]
 }

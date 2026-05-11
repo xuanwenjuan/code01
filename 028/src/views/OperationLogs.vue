@@ -11,13 +11,7 @@
         :show-status="true"
         :show-date="true"
         :show-operator="true"
-        :status-options="[
-          { label: '入库操作', value: 'inbound' },
-          { label: '出库操作', value: 'outbound' },
-          { label: '移库操作', value: 'transfer' },
-          { label: '库存调整', value: 'adjustment' },
-          { label: '库存盘点', value: 'inventory-check' }
-        ]"
+        :status-options="logStatusOptions"
         @filter="handleFilter"
       />
 
@@ -76,7 +70,7 @@
 import { ref, computed } from 'vue'
 import { Download, Upload, Transfer, Edit, Search } from '@element-plus/icons-vue'
 import { useOperationStore } from '@/stores/operation'
-import type { OperationType, FilterParams } from '@/types'
+import type { OperationType, FilterParams, ElementTagType, StatusOption } from '@/types'
 import AdvancedFilter from '@/components/AdvancedFilter.vue'
 
 const operationStore = useOperationStore()
@@ -87,8 +81,16 @@ const filteredLogs = computed(() => {
   return operationStore.filterLogs(currentFilter.value)
 })
 
-const getLogType = (type: OperationType): 'primary' | 'success' | 'warning' | 'danger' | 'info' => {
-  const typeMap: Record<OperationType, 'primary' | 'success' | 'warning' | 'danger' | 'info'> = {
+const logStatusOptions: StatusOption[] = [
+  { label: '入库操作', value: 'inbound' },
+  { label: '出库操作', value: 'outbound' },
+  { label: '移库操作', value: 'transfer' },
+  { label: '库存调整', value: 'adjustment' },
+  { label: '库存盘点', value: 'inventory-check' }
+]
+
+const getLogType = (type: OperationType): ElementTagType => {
+  const typeMap: Record<OperationType, ElementTagType> = {
     'inbound': 'success',
     'outbound': 'primary',
     'transfer': 'info',

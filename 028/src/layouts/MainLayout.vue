@@ -1,6 +1,6 @@
 <template>
   <el-container class="layout-container">
-    <el-aside :width="collapsed ? '64px' : '220px'" class="aside">
+    <el-aside :width="sidebarWidth" class="aside" :class="{ 'is-collapsed': collapsed }">
       <div class="logo">
         <el-icon class="logo-icon"><Warehouse /></el-icon>
         <span v-show="!collapsed" class="logo-text">仓储管理系统</span>
@@ -45,7 +45,7 @@
     <el-container>
       <el-header class="header">
         <div class="header-left">
-          <el-icon class="collapse-btn" @click="collapsed = !collapsed">
+          <el-icon class="collapse-btn" @click="handleToggleSidebar">
             <Fold v-if="!collapsed" />
             <Expand v-else />
           </el-icon>
@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   Warehouse,
@@ -99,10 +99,43 @@ import {
 } from '@element-plus/icons-vue'
 
 const route = useRoute()
+
+const SIDEBAR_WIDTH = 220
+const SIDEBAR_COLLAPSED_WIDTH = 64
+const MIN_WINDOW_WIDTH = 1024
+
 const collapsed = ref(false)
+const windowWidth = ref(window.innerWidth)
 
 const activeMenu = computed(() => route.path)
-const currentRouteName = computed(() => route.meta.title as string || '工作台')
+const currentRouteName = computed(() => (route.meta.title as string) || '工作台')
+
+const sidebarWidth = computed(() => {
+  if (windowWidth.value < MIN_WINDOW_WIDTH) {
+    return collapsed.value ? `${SIDEBAR_COLLAPSED_WIDTH}px` : `${SIDEBAR_WIDTH}px`
+  }
+  return collapsed.value ? `${SIDEBAR_COLLAPSED_WIDTH}px` : `${SIDEBAR_WIDTH}px`
+})
+
+const handleToggleSidebar = () => {
+  collapsed.value = !collapsed.value
+}
+
+const handleResize = () => {
+  windowWidth.value = window.innerWidth
+  if (windowWidth.value < MIN_WINDOW_WIDTH && !collapsed.value) {
+    collapsed.value = true
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+  handleResize()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 </script>
 
 <style scoped>
@@ -110,12 +143,18 @@ const currentRouteName = computed(() => route.meta.title as string || '工作台
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  min-width: 768px;
 }
 
 .aside {
   background-color: #001529;
-  transition: width 0.3s;
+  transition: width 0.3s ease;
   overflow: hidden;
+  flex-shrink: 0;
+}
+
+.aside.is-collapsed {
+  width: 64px !important;
 }
 
 .logo {
@@ -128,19 +167,27 @@ const currentRouteName = computed(() => route.meta.title as string || '工作台
   font-size: 18px;
   font-weight: bold;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .logo-icon {
   font-size: 28px;
   color: #1890ff;
+  flex-shrink: 0;
 }
 
 .logo-text {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .menu {
   border-right: none;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .header {
@@ -151,12 +198,15 @@ const currentRouteName = computed(() => route.meta.title as string || '工作台
   padding: 0 20px;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   height: 60px;
+  flex-shrink: 0;
 }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 20px;
+  flex: 1;
+  min-width: 0;
 }
 
 .collapse-btn {
@@ -164,6 +214,7 @@ const currentRouteName = computed(() => route.meta.title as string || '工作台
   cursor: pointer;
   color: #666;
   transition: color 0.3s;
+  flex-shrink: 0;
 }
 
 .collapse-btn:hover {
@@ -173,6 +224,7 @@ const currentRouteName = computed(() => route.meta.title as string || '工作台
 .header-right {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .user-info {
@@ -185,12 +237,15 @@ const currentRouteName = computed(() => route.meta.title as string || '工作台
 .username {
   font-size: 14px;
   color: #333;
+  white-space: nowrap;
 }
 
 .main {
   background-color: #f0f2f5;
   padding: 20px;
   overflow: auto;
+  min-width: 0;
+  flex: 1;
 }
 
 .fade-enter-active,
@@ -201,5 +256,25 @@ const currentRouteName = computed(() => route.meta.title as string || '工作台
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@media (max-width: 1200px) {
+  .username {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 0 12px;
+  }
+
+  .header-left {
+    gap: 12px;
+  }
+
+  .main {
+    padding: 12px;
+  }
 }
 </style>

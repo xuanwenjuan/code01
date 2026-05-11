@@ -151,7 +151,7 @@ import { OfficeBuilding, Box, Download, Upload } from '@element-plus/icons-vue'
 import { useWarehouseStore } from '@/stores/warehouse'
 import { useInventoryStore } from '@/stores/inventory'
 import { useOperationStore } from '@/stores/operation'
-import type { Inventory, InventoryStatus, OperationType } from '@/types'
+import type { Inventory, InventoryStatus, OperationType, ElementTagType, InboundOrderStatus, OutboundOrderStatus } from '@/types'
 
 const warehouseStore = useWarehouseStore()
 const inventoryStore = useInventoryStore()
@@ -159,12 +159,14 @@ const operationStore = useOperationStore()
 
 const warehouseCount = computed(() => warehouseStore.warehouseList.length)
 const inventoryCount = computed(() => inventoryStore.inventoryList.length)
-const pendingInbound = computed(() => 
-  inventoryStore.inboundOrderList.filter(o => o.status === 'pending' || o.status === 'in-progress').length
-)
-const pendingOutbound = computed(() => 
-  inventoryStore.outboundOrderList.filter(o => o.status === 'pending' || o.status === 'picking').length
-)
+const pendingInbound = computed((): number => {
+  const pendingStatuses: InboundOrderStatus[] = ['pending', 'in-progress']
+  return inventoryStore.inboundOrderList.filter(o => pendingStatuses.includes(o.status)).length
+})
+const pendingOutbound = computed((): number => {
+  const pendingStatuses: OutboundOrderStatus[] = ['pending', 'picking']
+  return inventoryStore.outboundOrderList.filter(o => pendingStatuses.includes(o.status)).length
+})
 
 const lowStockItems = computed(() => inventoryStore.lowStockItems)
 
@@ -180,8 +182,8 @@ const getMinStock = (productId: string): number => {
   return product?.minStock || 0
 }
 
-const getStatusType = (status: InventoryStatus): 'success' | 'warning' | 'info' | 'primary' => {
-  const statusMap: Record<InventoryStatus, 'success' | 'warning' | 'info' | 'primary'> = {
+const getStatusType = (status: InventoryStatus): ElementTagType => {
+  const statusMap: Record<InventoryStatus, ElementTagType> = {
     'on-shelf': 'success',
     'pending-in': 'warning',
     'picking': 'info',
@@ -200,8 +202,8 @@ const getStatusText = (status: InventoryStatus): string => {
   return textMap[status]
 }
 
-const getLogType = (type: OperationType): 'primary' | 'success' | 'warning' | 'danger' | 'info' => {
-  const typeMap: Record<OperationType, 'primary' | 'success' | 'warning' | 'danger' | 'info'> = {
+const getLogType = (type: OperationType): ElementTagType => {
+  const typeMap: Record<OperationType, ElementTagType> = {
     'inbound': 'success',
     'outbound': 'primary',
     'transfer': 'info',

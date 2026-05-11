@@ -209,12 +209,14 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { useInventoryStore } from '@/stores/inventory'
 import { useOperationStore } from '@/stores/operation'
+import { useWarehouseStore } from '@/stores/warehouse'
 import type { OutboundOrder, OutboundProduct, FilterParams, InboundProduct, Product, OutboundSubmitData } from '@/types'
 import AdvancedFilter from '@/components/AdvancedFilter.vue'
 import StockOperationDialog from '@/components/StockOperationDialog.vue'
 
 const inventoryStore = useInventoryStore()
 const operationStore = useOperationStore()
+const warehouseStore = useWarehouseStore()
 
 const currentFilter = ref<FilterParams>({})
 const dialogVisible = ref(false)
@@ -387,7 +389,7 @@ const handleView = (order: OutboundOrder) => {
 const handleSubmit = (data: OutboundSubmitData) => {
   const { operator, orderId, pickedQuantities, allPicked } = data
   
-  const order = inventoryStore.outboundOrderList.find(o => o.id === orderId)
+  const order = inventoryStore.getOutboundOrderById(orderId)
   
   if (order) {
     Object.entries(pickedQuantities).forEach(([productId, quantity]) => {
@@ -395,18 +397,32 @@ const handleSubmit = (data: OutboundSubmitData) => {
     })
     
     if (allPicked) {
-      inventoryStore.completeOutbound(orderId, operator, pickedQuantities)
+      const success = inventoryStore.completeOutbound(
+        orderId,
+        operator,
+        pickedQuantities,
+        (locationId: string) => warehouseStore.getLocationById(locationId),
+        (locationId: string, qty: number) => warehouseStore.removeQuantityFromLocation(locationId, qty)
+      )
+      
+      if (success) {
+        operationStore.addLog({
+          operationType: 'outbound',
+          operationTitle: '订单拣货出库',
+          operator,
+          operatorRole: '拣货员',
+          details: `完成出库单${order.orderNo}，所有商品已拣货完成`
+        })
+      }
+    } else {
+      operationStore.addLog({
+        operationType: 'outbound',
+        operationTitle: '订单部分拣货',
+        operator,
+        operatorRole: '拣货员',
+        details: `处理出库单${order.orderNo}，部分商品已拣货`
+      })
     }
-    
-    operationStore.addLog({
-      operationType: 'outbound',
-      operationTitle: allPicked ? '订单拣货出库' : '订单部分拣货',
-      operator,
-      operatorRole: '拣货员',
-      details: allPicked 
-        ? `完成出库单${order.orderNo}，所有商品已拣货完成` 
-        : `处理出库单${order.orderNo}，部分商品已拣货`
-    })
   }
 }
 </script>

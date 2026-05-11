@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Department, Doctor, Schedule, TitleLevel, OperationType, TargetType } from '@/types'
+import type { Department, Doctor, Schedule, TitleLevel, OperationType, TargetType, OperationLog } from '@/types'
 import { departmentApi, doctorApi, scheduleApi, operationLogApi } from '@/api'
 import { mockCurrentUser } from '@/mock/data'
+import { useAuditStore } from './audit'
 
 export const useSystemStore = defineStore('system', () => {
   const departments = ref<Department[]>([])
@@ -118,18 +119,21 @@ export const useSystemStore = defineStore('system', () => {
     targetId: string,
     targetName: string
   ) {
+    const logData: Omit<OperationLog, 'id' | 'createdAt'> = {
+      operatorId: currentUser.value.id,
+      operatorName: currentUser.value.name,
+      operatorRole: currentUser.value.role,
+      operationType,
+      operationDescription: description,
+      targetType,
+      targetId,
+      targetName,
+      ipAddress: '127.0.0.1'
+    }
     try {
-      await operationLogApi.create({
-        operatorId: currentUser.value.id,
-        operatorName: currentUser.value.name,
-        operatorRole: currentUser.value.role,
-        operationType,
-        operationDescription: description,
-        targetType,
-        targetId,
-        targetName,
-        ipAddress: '127.0.0.1'
-      })
+      const createdLog = await operationLogApi.create(logData)
+      const auditStore = useAuditStore()
+      auditStore.addLog(createdLog)
     } catch (e) {
       console.error('记录操作日志失败:', e)
     }

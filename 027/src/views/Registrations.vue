@@ -80,6 +80,23 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="挂号费" width="100" align="right">
+        <template #default="{ row }">
+          <span class="fee">¥{{ row.registrationFee.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="总费用" width="100" align="right">
+        <template #default="{ row }">
+          <span class="fee total">¥{{ row.totalFee.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="付费状态" width="100" align="center">
+        <template #default="{ row }">
+          <el-tag :type="getPaymentTagType(row.paymentStatus)" size="small">
+            {{ getPaymentLabel(row.paymentStatus) }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" width="100" align="center">
         <template #default="{ row }">
           <span :class="['status-tag', `status-${row.status}`]">
@@ -128,7 +145,7 @@
 import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import type { Registration, VisitStatus, FilterParams } from '@/types'
+import type { Registration, VisitStatus, FilterParams, PaymentStatus } from '@/types'
 import { useSystemStore } from '@/stores/system'
 import { useClinicStore } from '@/stores/clinic'
 import AdvancedFilter from '@/components/AdvancedFilter.vue'
@@ -154,6 +171,24 @@ function getStatusLabel(status: VisitStatus): string {
     ongoing: '就诊中',
     completed: '已完成',
     cancelled: '已取消'
+  }
+  return labels[status]
+}
+
+function getPaymentTagType(status: PaymentStatus): string {
+  const types: Record<PaymentStatus, string> = {
+    pending: 'warning',
+    paid: 'success',
+    refunded: 'info'
+  }
+  return types[status]
+}
+
+function getPaymentLabel(status: PaymentStatus): string {
+  const labels: Record<PaymentStatus, string> = {
+    pending: '待付费',
+    paid: '已付费',
+    refunded: '已退费'
   }
   return labels[status]
 }
@@ -316,6 +351,16 @@ onMounted(() => {
   &.status-cancelled {
     background-color: #f4f4f5;
     color: #909399;
+  }
+}
+
+.fee {
+  font-weight: 500;
+  color: #606266;
+
+  &.total {
+    font-weight: 700;
+    color: #f56c6c;
   }
 }
 </style>

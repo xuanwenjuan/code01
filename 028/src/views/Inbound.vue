@@ -401,28 +401,34 @@ const handleView = (order: InboundOrder) => {
 
 const handleSubmit = (data: InboundSubmitData) => {
   const { warehouseId, zoneId, locationId, operator, orderId } = data
-  const order = inventoryStore.inboundOrderList.find(o => o.id === orderId)
+  const order = inventoryStore.getInboundOrderById(orderId)
   
   if (order) {
-    inventoryStore.completeInbound(
+    const warehouse = warehouseStore.getWarehouseById(warehouseId)
+    const location = warehouseStore.getLocationById(locationId)
+    
+    const success = inventoryStore.completeInbound(
       orderId,
       order.products,
       warehouseId,
+      warehouse?.name || '',
       zoneId,
       locationId,
-      operator
+      location?.code || '',
+      operator,
+      (locId: string, qty: number) => warehouseStore.addQuantityToLocation(locId, qty)
     )
     
-    const warehouse = warehouseStore.getWarehouseById(warehouseId)
-    
-    operationStore.addLog({
-      operationType: 'inbound',
-      operationTitle: '商品入库上架',
-      operator,
-      operatorRole: '仓管员',
-      details: `完成入库单${order.orderNo}，商品已上架至${warehouse?.name || ''}`,
-      relatedWarehouse: warehouse?.name
-    })
+    if (success) {
+      operationStore.addLog({
+        operationType: 'inbound',
+        operationTitle: '商品入库上架',
+        operator,
+        operatorRole: '仓管员',
+        details: `完成入库单${order.orderNo}，商品已上架至${warehouse?.name || ''}`,
+        relatedWarehouse: warehouse?.name
+      })
+    }
   }
 }
 </script>

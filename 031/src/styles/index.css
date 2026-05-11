@@ -1,0 +1,178 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.text-danger {
+  color: #f56c6c;
+}
+
+.text-warning {
+  color: #e6a23c;
+}
+
+.text-success {
+  color: #67c23a;
+}
+
+.text-info {
+  color: #909399;
+}
+
+.el-form--inline .el-form-item {
+  margin-bottom: 12px;
+}
+
+.el-table {
+  font-size: 14px;
+}
+
+.el-card {
+  border-radius: 8px;
+}
+
+.el-card__header {
+  border-bottom: 1px solid #ebeef5;
+  padding: 15px 20px;
+}
+
+.el-dialog {
+  border-radius: 8px;
+}
+
+.el-pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+@media (max-width: 1200px) {
+  .el-table .el-table__column-filter-trigger {
+    display: none;
+  }
+}
+
+@media (max-width: 992px) {
+  .el-form--inline .el-form-item {
+    margin-right: 10px;
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .el-card {
+    margin: 0;
+  }
+
+  .main {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .el-form--inline .el-form-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .el-form--inline .el-form-item__label {
+    margin-bottom: 5px;
+  }
+
+  .el-table {
+    font-size: 12px;
+  }
+
+  .el-pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .el-button {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+}

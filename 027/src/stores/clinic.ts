@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Registration, Prescription, Patient, VisitStatus, TimeSlot } from '@/types'
-import { registrationApi, prescriptionApi, patientApi, operationLogApi } from '@/api'
+import { ElMessage } from 'element-plus'
+import type { Registration, Prescription, Patient, VisitStatus, TimeSlot, PaymentStatus } from '@/types'
+import { registrationApi, prescriptionApi, patientApi } from '@/api'
 import { useSystemStore } from './system'
 
 export interface FilterParams {
@@ -12,6 +13,37 @@ export interface FilterParams {
   timeSlot?: TimeSlot
   scheduleDate?: string
   patientName?: string
+}
+
+type StatusTransition = Record<VisitStatus, VisitStatus[]>
+
+const STATUS_TRANSITIONS: StatusTransition = {
+  waiting: ['ongoing', 'cancelled'],
+  ongoing: ['completed', 'cancelled'],
+  completed: [],
+  cancelled: []
+}
+
+const PAYMENT_STATUS_MAP: Partial<Record<VisitStatus, PaymentStatus>> = {
+  waiting: 'pending',
+  ongoing: 'paid',
+  completed: 'paid',
+  cancelled: 'refunded'
+}
+
+function canTransition(from: VisitStatus, to: VisitStatus): boolean {
+  const allowed = STATUS_TRANSITIONS[from]
+  return allowed.includes(to)
+}
+
+function getStatusErrorMessage(from: VisitStatus, to: VisitStatus): string {
+  const statusLabels: Record<VisitStatus, string> = {
+    waiting: '候诊中',
+    ongoing: '就诊中',
+    completed: '已完成',
+    cancelled: '已取消'
+  }
+  return `无法从「${statusLabels[from]}」状态切换到「${statusLabels[to]}」状态`
 }
 
 export const useClinicStore = defineStore('clinic', () => {
@@ -78,6 +110,15 @@ export const useClinicStore = defineStore('clinic', () => {
     cancelled: cancelledCount.value
   }))
 
+  const currentCalling = computed(() => {
+    return registrations.value.find(r => r.status === 'ongoing')?.visitNumber || null
+  })
+
+  const nextInQueue = computed(() => {
+    const waitingList = registrations.value.filter(r => r.status === 'waiting')
+    return waitingList.length > 0 ? waitingList[0].visitNumber : null
+  })
+
   async function fetchRegistrations() {
     isLoading.value = true
     try {
@@ -113,6 +154,17 @@ export const useClinicStore = defineStore('clinic', () => {
     filterParams.value = {}
   }
 
+  function updateRegistrationLocal(reg: Registration) {
+    const index = registrations.value.findIndex(r => r.id === reg.id)
+    if (index > -1) {
+      registrations.value[index] = reg
+    }
+  }
+
+  function getRegistrationById(id: string): Registration | undefined {
+    return registrations.value.find(r => r.id === id)
+  }
+
   async function createRegistration(data: Partial<Registration>) {
     const reg = await registrationApi.create(data)
     registrations.value.unshift(reg)
@@ -123,15 +175,24 @@ export const useClinicStore = defineStore('clinic', () => {
       reg.id,
       `${reg.patientName} - ${reg.departmentName}`
     )
+    ElMessage.success('挂号成功')
     return reg
   }
 
   async function cancelRegistration(id: string) {
-    const reg = await registrationApi.cancel(id)
-    const index = registrations.value.findIndex(r => r.id === id)
-    if (index > -1) {
-      registrations.value[index] = reg
+    const currentReg = getRegistrationById(id)
+    if (!currentReg) {
+      throw new Error('挂号单不存在')
     }
+
+    if (!canTransition(currentReg.status, 'cancelled')) {
+      const errorMsg = getStatusErrorMessage(currentReg.status, 'cancelled')
+      ElMessage.error(errorMsg)
+      throw new Error(errorMsg)
+    }
+
+    const reg = await registrationApi.cancel(id)
+    updateRegistrationLocal(reg)
     await systemStore.logOperation(
       'cancel_registration',
       '退号处理',
@@ -139,15 +200,32 @@ export const useClinicStore = defineStore('clinic', () => {
       reg.id,
       `${reg.patientName} - ${reg.departmentName}`
     )
+    ElMessage.success('退号成功')
     return reg
   }
 
   async function startVisit(id: string) {
-    const reg = await registrationApi.updateStatus(id, 'ongoing')
-    const index = registrations.value.findIndex(r => r.id === id)
-    if (index > -1) {
-      registrations.value[index] = reg
+    const currentReg = getRegistrationById(id)
+    if (!currentReg) {
+      throw new Error('挂号单不存在')
     }
+
+    if (!canTransition(currentReg.status, 'ongoing')) {
+      const errorMsg = getStatusErrorMessage(currentReg.status, 'ongoing')
+      ElMessage.error(errorMsg)
+      throw new Error(errorMsg)
+    }
+
+    const hasOngoing = registrations.value.some(
+      r => r.status === 'ongoing' && r.doctorId === currentReg.doctorId
+    )
+    if (hasOngoing) {
+      ElMessage.warning('该医生当前有正在进行的就诊，请先完成当前就诊')
+      throw new Error('该医生当前有正在进行的就诊')
+    }
+
+    const reg = await registrationApi.updateStatus(id, 'ongoing')
+    updateRegistrationLocal(reg)
     await systemStore.logOperation(
       'start_visit',
       '开始接诊',
@@ -155,15 +233,29 @@ export const useClinicStore = defineStore('clinic', () => {
       reg.id,
       `${reg.patientName} - ${reg.doctorName}`
     )
+    ElMessage.success('已开始接诊')
     return reg
   }
 
   async function completeVisit(id: string, diagnosis: string) {
-    const reg = await registrationApi.updateStatus(id, 'completed', diagnosis)
-    const index = registrations.value.findIndex(r => r.id === id)
-    if (index > -1) {
-      registrations.value[index] = reg
+    const currentReg = getRegistrationById(id)
+    if (!currentReg) {
+      throw new Error('挂号单不存在')
     }
+
+    if (!canTransition(currentReg.status, 'completed')) {
+      const errorMsg = getStatusErrorMessage(currentReg.status, 'completed')
+      ElMessage.error(errorMsg)
+      throw new Error(errorMsg)
+    }
+
+    if (!diagnosis || !diagnosis.trim()) {
+      ElMessage.error('请输入诊断结果')
+      throw new Error('诊断结果不能为空')
+    }
+
+    const reg = await registrationApi.updateStatus(id, 'completed', diagnosis.trim())
+    updateRegistrationLocal(reg)
     await systemStore.logOperation(
       'complete_visit',
       '完成就诊',
@@ -171,12 +263,23 @@ export const useClinicStore = defineStore('clinic', () => {
       reg.id,
       `${reg.patientName} - ${reg.doctorName}`
     )
+    ElMessage.success('就诊已完成')
     return reg
   }
 
   async function createPrescription(data: Partial<Prescription>) {
     const presc = await prescriptionApi.create(data)
     prescriptions.value.unshift(presc)
+    
+    const registration = getRegistrationById(presc.registrationId)
+    if (registration) {
+      const updatedReg: Registration = {
+        ...registration,
+        totalFee: registration.registrationFee + presc.totalPrice
+      }
+      updateRegistrationLocal(updatedReg)
+    }
+    
     await systemStore.logOperation(
       'create_prescription',
       '开具处方',
@@ -184,6 +287,7 @@ export const useClinicStore = defineStore('clinic', () => {
       presc.id,
       `${presc.patientName} - ${presc.doctorName}`
     )
+    ElMessage.success('处方已开具')
     return presc
   }
 
@@ -199,11 +303,14 @@ export const useClinicStore = defineStore('clinic', () => {
     filterParams,
     filteredRegistrations,
     queueStats,
+    currentCalling,
+    nextInQueue,
     fetchRegistrations,
     fetchPrescriptions,
     fetchPatients,
     setFilterParams,
     clearFilters,
+    getRegistrationById,
     createRegistration,
     cancelRegistration,
     startVisit,

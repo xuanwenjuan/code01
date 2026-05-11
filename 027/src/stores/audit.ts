@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { OperationLog, UserRole, OperationType } from '@/types'
+import type { OperationLog, UserRole, OperationType, TargetType } from '@/types'
 import { operationLogApi } from '@/api'
 
 export interface LogFilterParams {
   operatorRole?: UserRole
   operationType?: OperationType
-  targetType?: string
+  targetType?: TargetType
   startTime?: string
   endTime?: string
   operatorName?: string
@@ -16,6 +16,7 @@ export const useAuditStore = defineStore('audit', () => {
   const operationLogs = ref<OperationLog[]>([])
   const isLoading = ref(false)
   const filterParams = ref<LogFilterParams>({})
+  const unreadCount = ref(0)
 
   const operationTypeOptions = [
     { value: 'create_department', label: '新增科室' },
@@ -77,6 +78,31 @@ export const useAuditStore = defineStore('audit', () => {
     })
   })
 
+  const recentLogs = computed(() => {
+    return operationLogs.value.slice(0, 10)
+  })
+
+  const operationStats = computed(() => {
+    const stats: Record<OperationType, number> = {
+      create_department: 0,
+      update_department: 0,
+      delete_department: 0,
+      create_doctor: 0,
+      update_doctor: 0,
+      delete_doctor: 0,
+      update_schedule: 0,
+      create_registration: 0,
+      cancel_registration: 0,
+      start_visit: 0,
+      complete_visit: 0,
+      create_prescription: 0
+    }
+    operationLogs.value.forEach(log => {
+      stats[log.operationType] = (stats[log.operationType] || 0) + 1
+    })
+    return stats
+  })
+
   async function fetchLogs() {
     isLoading.value = true
     try {
@@ -84,6 +110,11 @@ export const useAuditStore = defineStore('audit', () => {
     } finally {
       isLoading.value = false
     }
+  }
+
+  function addLog(log: OperationLog) {
+    operationLogs.value.unshift(log)
+    unreadCount.value++
   }
 
   function setFilterParams(params: Partial<LogFilterParams>) {
@@ -94,16 +125,40 @@ export const useAuditStore = defineStore('audit', () => {
     filterParams.value = {}
   }
 
+  function clearUnread() {
+    unreadCount.value = 0
+  }
+
+  function getLogsByTargetType(targetType: TargetType) {
+    return operationLogs.value.filter(log => log.targetType === targetType)
+  }
+
+  function getLogsByTargetId(targetId: string) {
+    return operationLogs.value.filter(log => log.targetId === targetId)
+  }
+
+  function getLogsByOperatorId(operatorId: string) {
+    return operationLogs.value.filter(log => log.operatorId === operatorId)
+  }
+
   return {
     operationLogs,
     isLoading,
     filterParams,
+    unreadCount,
     operationTypeOptions,
     userRoleOptions,
     targetTypeOptions,
     filteredLogs,
+    recentLogs,
+    operationStats,
     fetchLogs,
+    addLog,
     setFilterParams,
-    clearFilters
+    clearFilters,
+    clearUnread,
+    getLogsByTargetType,
+    getLogsByTargetId,
+    getLogsByOperatorId
   }
 })
