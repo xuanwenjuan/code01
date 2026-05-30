@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spindle.manage.mapper.InventoryLockRecordMapper">
+
+    <select id="getLockedQuantityByMaterialId" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(lock_quantity), 0) FROM inventory_lock_record
+        WHERE material_id = #{materialId} AND lock_status = 1
+    </select>
+
+</mapper>

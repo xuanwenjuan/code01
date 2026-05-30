@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spindle.manage.mapper.ProductionLossRecordMapper">
+
+    <select id="getTotalLossAmountByOrderId" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(loss_amount), 0) FROM production_loss_record
+        WHERE order_id = #{orderId}
+    </select>
+
+    <select id="getLossRecordsByOrderId" resultType="com.spindle.manage.entity.ProductionLossRecord">
+        SELECT * FROM production_loss_record
+        WHERE order_id = #{orderId}
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

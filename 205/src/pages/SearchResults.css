@@ -1,0 +1,153 @@
+.search-results-page {
+  padding: 0;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  margin: 0 !important;
+  color: #1a1a2e;
+  font-size: 20px !important;
+}
+
+.search-info {
+  margin-bottom: 20px;
+  border-radius: 12px;
+}
+
+.search-keyword {
+  margin: 0 !important;
+  font-size: 14px;
+  color: #666;
+}
+
+.keyword-highlight {
+  color: #d4af37;
+  font-weight: 600;
+  margin: 0 4px;
+}
+
+.result-count {
+  margin-left: 16px;
+  color: #999;
+}
+
+.results-container {
+  border-radius: 12px;
+}
+
+.results-tabs .ant-tabs-nav {
+  padding: 0 24px;
+  background: #fafafa;
+  margin-bottom: 0 !important;
+}
+
+.results-tabs .ant-tabs-content-holder {
+  padding: 24px;
+}
+
+.result-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.result-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.result-cover {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+
+.result-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.type-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+}
+
+.technique-cover {
+  background: linear-gradient(135deg, #d4af37 0%, #c4a030 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-icon {
+  font-size: 48px;
+  color: #fff;
+}
+
+.artisan-card {
+  text-align: center;
+}
+
+.artisan-cover {
+  padding: 20px;
+  background: linear-gradient(135deg, #722ed1 0%, #531dab 100%);
+  position: relative;
+}
+
+.result-desc {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 8px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.result-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #999;
+}
+
+.result-price {
+  color: #d4af37;
+  font-weight: 600;
+}
+
+.empty-results {
+  border-radius: 12px;
+  text-align: center;
+}
+
+.empty-tip {
+  color: #999;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .search-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

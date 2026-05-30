@@ -1,0 +1,30 @@
+import { Model } from 'sequelize';
+import { MaterialStatus, MaterialType } from '../types';
+declare class Material extends Model {
+    id: number;
+    batchNo: string;
+    name: string;
+    type: MaterialType;
+    specification: string;
+    unit: string;
+    stockQuantity: number;
+    lockedQuantity: number;
+    availableQuantity: number;
+    warningThreshold: number;
+    unitPrice: number;
+    supplier: string;
+    supplierPhone: string;
+    supplierAddress: string;
+    purchaseDate: Date | null;
+    storageDate: Date | null;
+    origin: string;
+    color: string;
+    weight: string;
+    width: string;
+    usage: string;
+    status: MaterialStatus;
+    remarks: string;
+    readonly createdAt: Date;
+    readonly updatedAt: Date;
+}
+export default Material;

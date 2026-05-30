@@ -1,0 +1,192 @@
+.home-page {
+  .location-bar {
+    background: #fff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .hotline {
+      color: #666;
+
+      strong {
+        color: #f5222d;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 60px 48px;
+    margin-bottom: 40px;
+    color: #fff;
+
+    .banner-content {
+      h1 {
+        font-size: 36px;
+        margin-bottom: 16px;
+        color: #fff;
+      }
+
+      p {
+        font-size: 18px;
+        margin-bottom: 24px;
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .section-title {
+    font-size: 24px;
+    margin-bottom: 24px;
+    color: #333;
+    position: relative;
+    padding-left: 12px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      height: 20px;
+      width: 4px;
+      background: #1890ff;
+      border-radius: 2px;
+    }
+  }
+
+  .services-section {
+    margin-bottom: 40px;
+
+    .service-card {
+      text-align: center;
+      transition: all 0.3s;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      .service-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+
+      h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      .service-desc {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 16px;
+        min-height: 42px;
+      }
+
+      .service-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .price {
+          color: #f5222d;
+          font-size: 18px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .masters-section {
+    margin-bottom: 40px;
+
+    .master-card {
+      .master-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .master-info {
+          margin-left: 16px;
+          flex: 1;
+
+          h3 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+          }
+
+          .rating-text {
+            margin-left: 8px;
+            color: #faad14;
+            font-size: 14px;
+          }
+        }
+      }
+
+      .master-stats {
+        display: flex;
+        justify-content: space-around;
+        padding: 16px 0;
+        border-top: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 16px;
+
+        div {
+          text-align: center;
+
+          strong {
+            display: block;
+            font-size: 18px;
+            color: #1890ff;
+          }
+
+          span {
+            font-size: 12px;
+            color: #999;
+          }
+        }
+      }
+
+      .master-skills {
+        margin-bottom: 12px;
+      }
+
+      .master-area {
+        color: #666;
+        font-size: 13px;
+        margin: 0;
+      }
+    }
+  }
+
+  .features-section {
+    .feature-item {
+      background: #fff;
+      padding: 32px;
+      border-radius: 8px;
+      text-align: center;
+
+      .feature-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+
+      h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      p {
+        color: #666;
+        margin: 0;
+      }
+    }
+  }
+}

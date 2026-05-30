@@ -1,0 +1,43 @@
+.knowledge-text {
+  color: #d4af37;
+  cursor: help;
+  text-decoration: underline dotted #d4af37;
+  text-underline-offset: 3px;
+}
+
+.knowledge-btn {
+  padding: 0 4px;
+  height: auto;
+}
+
+.knowledge-tooltip {
+  max-width: 320px;
+}
+
+.knowledge-title {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #d4af37;
+}
+
+.knowledge-content {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #666;
+}
+
+.knowledge-overlay .ant-tooltip-inner {
+  background: #fff;
+  color: #333;
+  border: 1px solid #d4af37;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.2);
+}
+
+.knowledge-overlay .ant-tooltip-arrow-content {
+  background: #fff;
+  border-inline-end: 1px solid #d4af37;
+  border-block-end: 1px solid #d4af37;
+}

@@ -1,0 +1,50 @@
+.profile-page {
+  padding: 0;
+}
+
+.profile-card {
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-info h2 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  color: #1a1a2e;
+}
+
+.profile-desc {
+  margin-bottom: 24px;
+}
+
+.stat-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: #d4af37;
+  margin-right: 4px;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.profile-actions .ant-btn-primary {
+  background: #d4af37;
+  border-color: #d4af37;
+}
+
+.profile-actions .ant-btn-primary:hover {
+  background: #c4a030 !important;
+  border-color: #c4a030 !important;
+}

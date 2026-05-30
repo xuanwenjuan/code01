@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spindle.manage.mapper.ProductionOrderMapper">
+
+    <select id="queryByConditions" resultType="com.spindle.manage.entity.ProductionOrder">
+        SELECT * FROM production_order
+        <where>
+            is_deleted = 0
+            <if test="dto.orderNo != null and dto.orderNo != ''">
+                AND order_no LIKE CONCAT('%', #{dto.orderNo}, '%')
+            </if>
+            <if test="dto.categoryId != null">
+                AND category_id = #{dto.categoryId}
+            </if>
+            <if test="dto.orderStatus != null">
+                AND order_status = #{dto.orderStatus}
+            </if>
+            <if test="dto.currentProcess != null">
+                AND current_process = #{dto.currentProcess}
+            </if>
+            <if test="dto.materialPrepareStatus != null">
+                AND material_prepare_status = #{dto.materialPrepareStatus}
+            </if>
+            <if test="dto.responsiblePerson != null">
+                AND responsible_person = #{dto.responsiblePerson}
+            </if>
+            <if test="dto.planStartTimeStart != null">
+                AND plan_start_time >= #{dto.planStartTimeStart}
+            </if>
+            <if test="dto.planStartTimeEnd != null">
+                AND plan_start_time <= #{dto.planStartTimeEnd}
+            </if>
+            <if test="dto.createStartTime != null">
+                AND create_time >= #{dto.createStartTime}
+            </if>
+            <if test="dto.createEndTime != null">
+                AND create_time <= #{dto.createEndTime}
+            </if>
+        </where>
+        ORDER BY ${dto.orderBy} ${dto.orderType}
+    </select>
+
+</mapper>

@@ -1,0 +1,37 @@
+.type-card {
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.type-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.type-card-image {
+  height: 200px;
+  object-fit: cover;
+}
+
+.type-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.type-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.type-card-difficulty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+}

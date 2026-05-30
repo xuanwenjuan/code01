@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fishing.distribution.mapper.SortingOrderMapper">
+
+    <select id="selectTimeoutOrders" resultType="com.fishing.distribution.entity.SortingOrder">
+        SELECT * FROM sorting_order
+        WHERE status BETWEEN 1 AND 4
+        AND warning_status = 0
+        AND create_time &lt;= #{warningTime}
+        AND deleted = 0
+        ORDER BY create_time ASC
+    </select>
+
+</mapper>

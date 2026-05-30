@@ -1,0 +1,10 @@
+.empty-wrapper {
+  @include flex-center;
+  background: $white;
+  border-radius: $border-radius;
+  padding: 60px 20px;
+
+  &.full-height {
+    min-height: 400px;
+  }
+}

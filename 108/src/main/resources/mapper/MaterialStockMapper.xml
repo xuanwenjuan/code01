@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.instrument.consignment.mapper.MaterialStockMapper">
+
+    <update id="lockStock">
+        UPDATE material_stock
+        SET locked_quantity = locked_quantity + #{quantity},
+            available_quantity = available_quantity - #{quantity}
+        WHERE id = #{materialId}
+          AND is_deleted = 0
+          AND available_quantity >= #{quantity}
+    </update>
+
+    <update id="unlockStock">
+        UPDATE material_stock
+        SET locked_quantity = locked_quantity - #{quantity},
+            available_quantity = available_quantity + #{quantity}
+        WHERE id = #{materialId}
+          AND is_deleted = 0
+          AND locked_quantity >= #{quantity}
+    </update>
+
+    <update id="deductStock">
+        UPDATE material_stock
+        SET total_quantity = total_quantity - #{quantity},
+            locked_quantity = locked_quantity - #{quantity}
+        WHERE id = #{materialId}
+          AND is_deleted = 0
+          AND locked_quantity >= #{quantity}
+    </update>
+
+</mapper>

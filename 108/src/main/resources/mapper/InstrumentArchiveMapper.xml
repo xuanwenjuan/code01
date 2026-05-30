@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.instrument.consignment.mapper.InstrumentArchiveMapper">
+
+    <select id="selectArchivePage" resultType="com.instrument.consignment.vo.InstrumentArchiveVO">
+        SELECT
+            a.*,
+            c.category_name,
+            u.real_name as seller_name,
+            CASE a.condition_level
+                WHEN 'EXCELLENT' THEN '优秀'
+                WHEN 'GOOD' THEN '良好'
+                WHEN 'FAIR' THEN '一般'
+                WHEN 'POOR' THEN '较差'
+                ELSE a.condition_level
+            END as condition_level_desc,
+            CASE a.status
+                WHEN 'TO_REFURBISH' THEN '待翻新'
+                WHEN 'REFURBISHING' THEN '翻新中'
+                WHEN 'TO_SELL' THEN '待寄售'
+                WHEN 'SOLD' THEN '已售出'
+                ELSE a.status
+            END as status_desc
+        FROM instrument_archive a
+        LEFT JOIN instrument_category c ON a.category_id = c.id
+        LEFT JOIN sys_user u ON a.seller_id = u.id
+        WHERE a.is_deleted = 0
+        <if test="query.categoryId != null">
+            AND a.category_id = #{query.categoryId}
+        </if>
+        <if test="query.brand != null and query.brand != ''">
+            AND a.brand LIKE CONCAT('%', #{query.brand}, '%')
+        </if>
+        <if test="query.productionYearStart != null">
+            AND a.production_year >= #{query.productionYearStart}
+        </if>
+        <if test="query.productionYearEnd != null">
+            AND a.production_year <= #{query.productionYearEnd}
+        </if>
+        <if test="query.conditionLevel != null and query.conditionLevel != ''">
+            AND a.condition_level = #{query.conditionLevel}
+        </if>
+        <if test="query.status != null and query.status != ''">
+            AND a.status = #{query.status}
+        </if>
+        <if test="query.traceNo != null and query.traceNo != ''">
+            AND a.trace_no LIKE CONCAT('%', #{query.traceNo}, '%')
+        </if>
+        <if test="query.sellerId != null">
+            AND a.seller_id = #{query.sellerId}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

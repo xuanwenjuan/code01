@@ -1,0 +1,182 @@
+.orders-page {
+  padding: 20px 0;
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .orders-card {
+    box-shadow: $box-shadow;
+
+    .order-item {
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+      display: block;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .order-header {
+        @include flex-between;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid $border-color;
+
+        .order-info {
+          display: flex;
+          gap: 20px;
+
+          .order-no {
+            font-weight: 500;
+          }
+
+          .order-time {
+            color: $text-secondary;
+          }
+        }
+      }
+
+      .order-products {
+        margin-bottom: 16px;
+
+        .product-item {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 12px 0;
+
+          .product-image {
+            border-radius: 8px;
+          }
+
+          .product-info {
+            flex: 1;
+
+            .product-name {
+              @include ellipsis;
+              max-width: 400px;
+              margin-bottom: 4px;
+            }
+
+            .product-spec {
+              font-size: 12px;
+              color: $text-secondary;
+            }
+          }
+
+          .product-price {
+            text-align: right;
+
+            .price {
+              color: $danger-color;
+              font-weight: 600;
+              margin-right: 12px;
+            }
+
+            .quantity {
+              color: $text-secondary;
+            }
+          }
+        }
+      }
+
+      .order-footer {
+        @include flex-between;
+
+        .order-total {
+          font-size: 14px;
+
+          .total-price {
+            color: $danger-color;
+            font-size: 18px;
+            font-weight: 700;
+          }
+        }
+
+        .order-actions {
+          display: flex;
+          gap: 8px;
+        }
+      }
+    }
+
+    .empty-orders {
+      padding: 60px 0;
+    }
+  }
+
+  .order-detail {
+    .detail-section {
+      margin-bottom: 24px;
+
+      h4 {
+        margin-bottom: 12px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 4px 0;
+        color: $text-secondary;
+      }
+
+      .tracking-info {
+        margin-top: 12px;
+        padding: 12px;
+        background: $bg-color;
+        border-radius: 8px;
+      }
+
+      .time {
+        color: $text-secondary;
+        font-size: 12px;
+      }
+
+      .detail-product {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+
+        img {
+          border-radius: 4px;
+        }
+
+        .info {
+          flex: 1;
+
+          .spec {
+            font-size: 12px;
+            color: $text-secondary;
+          }
+        }
+
+        .price {
+          color: $danger-color;
+          font-weight: 500;
+        }
+      }
+
+      .price-summary {
+        padding: 16px;
+        background: $bg-color;
+        border-radius: 8px;
+
+        .text-right {
+          text-align: right;
+        }
+
+        .total {
+          color: $danger-color;
+          font-weight: 600;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}

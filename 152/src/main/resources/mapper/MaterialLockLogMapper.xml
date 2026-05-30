@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evparts.mapper.MaterialLockLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.evparts.entity.MaterialLockLog">
+        <id column="id" property="id"/>
+        <result column="work_order_id" property="workOrderId"/>
+        <result column="work_order_material_id" property="workOrderMaterialId"/>
+        <result column="material_id" property="materialId"/>
+        <result column="material_stock_id" property="materialStockId"/>
+        <result column="lock_quantity" property="lockQuantity"/>
+        <result column="lock_type" property="lockType"/>
+        <result column="status" property="status"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="release_time" property="releaseTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="getByWorkOrderId" resultMap="BaseResultMap">
+        SELECT * FROM material_lock_log
+        WHERE work_order_id = #{workOrderId} AND deleted = 0
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="releaseByWorkOrderId">
+        UPDATE material_lock_log
+        SET status = 2, release_time = NOW()
+        WHERE work_order_id = #{workOrderId} AND status = 1 AND deleted = 0
+    </update>
+
+</mapper>

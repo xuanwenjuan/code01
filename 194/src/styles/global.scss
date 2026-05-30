@@ -1,0 +1,103 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #303133;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2d3d;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(180deg, #409eff 0%, #67c23a 100%);
+  border-radius: 2px;
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.price-text {
+  color: #f56c6c;
+  font-weight: 600;
+}
+
+.original-price {
+  color: #909399;
+  text-decoration: line-through;
+  font-size: 14px;
+}
+
+.tag-deepspace {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.tag-planet {
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+}
+
+.empty-state {
+  padding: 60px 0;
+  text-align: center;
+}
+
+.empty-state .el-icon {
+  font-size: 64px;
+  color: #c0c4cc;
+  margin-bottom: 16px;
+}
+
+.empty-state-text {
+  color: #909399;
+  font-size: 14px;
+}
+
+.loading-wrapper {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

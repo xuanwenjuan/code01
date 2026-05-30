@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f0f2f5;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.page-container {
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  min-height: calc(100vh - 64px - 48px);
+}
+
+.table-row-warning {
+  background-color: #fffbe6 !important;
+  
+  &:hover > td {
+    background-color: #fff7cc !important;
+  }
+}
+
+.table-row-danger {
+  background-color: #fff2f0 !important;
+  
+  &:hover > td {
+    background-color: #ffccc7 !important;
+  }
+}
+
+.custom-empty {
+  padding: 48px 0;
+  text-align: center;
+  
+  .ant-empty-description {
+    color: #999;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 0;
+  min-height: 200px;
+}
+
+.filter-tag {
+  margin: 4px;
+  
+  &.active {
+    background-color: #13c2c2;
+    color: #fff;
+    border-color: #13c2c2;
+  }
+}
+
+.status-badge {
+  .ant-badge-status-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px;
+    margin: 0;
+    border-radius: 0;
+  }
+}

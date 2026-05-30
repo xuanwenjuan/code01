@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evparts.mapper.ProductionCostMapper">
+
+    <resultMap id="CostDetailMap" type="com.evparts.entity.ProductionCost">
+        <id column="id" property="id"/>
+        <result column="cost_no" property="costNo"/>
+        <result column="work_order_id" property="workOrderId"/>
+        <result column="product_id" property="productId"/>
+        <result column="total_material_cost" property="totalMaterialCost"/>
+        <result column="total_mold_cost" property="totalMoldCost"/>
+        <result column="total_energy_cost" property="totalEnergyCost"/>
+        <result column="total_labor_cost" property="totalLaborCost"/>
+        <result column="total_scrap_cost" property="totalScrapCost"/>
+        <result column="total_cost" property="totalCost"/>
+        <result column="unit_cost" property="unitCost"/>
+        <result column="cost_date" property="costDate"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_code" property="productCode"/>
+        <result column="category_name" property="productCode"/>
+        <result column="actual_quantity" property="totalCost"/>
+        <result column="plan_quantity" property="unitCost"/>
+    </resultMap>
+
+    <select id="getCostDetailPage" resultMap="CostDetailMap">
+        SELECT
+            pc.*,
+            wo.order_no,
+            wo.actual_quantity,
+            wo.plan_quantity,
+            p.product_name,
+            p.product_code,
+            pc2.category_name
+        FROM production_cost pc
+        LEFT JOIN work_order wo ON pc.work_order_id = wo.id
+        LEFT JOIN product p ON pc.product_id = p.id
+        LEFT JOIN product_category pc2 ON p.category_id = pc2.id
+        <where>
+            pc.deleted = 0
+            <if test="costNo != null and costNo != ''">
+                AND pc.cost_no LIKE CONCAT('%', #{costNo}, '%')
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                AND wo.order_no LIKE CONCAT('%', #{orderNo}, '%')
+            </if>
+            <if test="productName != null and productName != ''">
+                AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+            </if>
+            <if test="categoryId != null">
+                AND p.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                AND pc.status = #{status}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND pc.cost_date >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND pc.cost_date &lt;= #{endDate}
+            </if>
+        </where>
+        ORDER BY pc.create_time DESC
+    </select>
+
+    <select id="getCostAnalysis" resultType="java.util.Map">
+        SELECT
+            pc.cost_date,
+            COUNT(*) AS cost_count,
+            SUM(pc.total_cost) AS total_cost,
+            SUM(pc.total_material_cost) AS total_material_cost,
+            SUM(pc.total_mold_cost) AS total_mold_cost,
+            SUM(pc.total_energy_cost) AS total_energy_cost,
+            SUM(pc.total_labor_cost) AS total_labor_cost,
+            SUM(pc.total_scrap_cost) AS total_scrap_cost,
+            AVG(pc.unit_cost) AS avg_unit_cost,
+            SUM(wo.actual_quantity) AS total_output
+        FROM production_cost pc
+        LEFT JOIN work_order wo ON pc.work_order_id = wo.id
+        WHERE pc.deleted = 0
+          AND pc.status IN (1, 2)
+        <if test="startDate != null and startDate != ''">
+            AND pc.cost_date >= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND pc.cost_date &lt;= #{endDate}
+        </if>
+        <if test="productId != null">
+            AND pc.product_id = #{productId}
+        </if>
+        GROUP BY pc.cost_date
+        ORDER BY pc.cost_date ASC
+    </select>
+
+    <select id="getCostByProduct" resultType="java.util.Map">
+        SELECT
+            p.id AS product_id,
+            p.product_name,
+            p.product_code,
+            COUNT(*) AS cost_count,
+            SUM(pc.total_cost) AS total_cost,
+            SUM(wo.actual_quantity) AS total_quantity,
+            AVG(pc.unit_cost) AS avg_unit_cost,
+            MIN(pc.unit_cost) AS min_unit_cost,
+            MAX(pc.unit_cost) AS max_unit_cost
+        FROM production_cost pc
+        LEFT JOIN product p ON pc.product_id = p.id
+        LEFT JOIN work_order wo ON pc.work_order_id = wo.id
+        WHERE pc.deleted = 0
+          AND pc.status IN (1, 2)
+        <if test="startDate != null and startDate != ''">
+            AND pc.cost_date >= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND pc.cost_date &lt;= #{endDate}
+        </if>
+        GROUP BY p.id, p.product_name, p.product_code
+        ORDER BY total_cost DESC
+    </select>
+
+</mapper>

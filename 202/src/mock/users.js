@@ -1,0 +1,41 @@
+export const users = [
+  {
+    id: 1,
+    username: 'admin',
+    password: 'admin123',
+    role: 'admin',
+    name: '张管理员',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
+    phone: '13800138000',
+    email: 'admin@papermuseum.com',
+    department: '档案管理部',
+    createTime: '2023-01-15',
+  },
+  {
+    id: 2,
+    username: 'inheritor',
+    password: 'inherit123',
+    role: 'inheritor',
+    name: '李传承',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=inherit',
+    phone: '13900139000',
+    email: 'lichuancheng@papermuseum.com',
+    title: '国家级非物质文化遗产传承人',
+    skill: '宣纸制作技艺',
+    experience: 30,
+    createTime: '2023-03-20',
+  },
+  {
+    id: 3,
+    username: 'user1',
+    password: 'user123',
+    role: 'user',
+    name: '王游客',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user1',
+    phone: '13700137000',
+    email: 'wangyouke@example.com',
+    createTime: '2024-01-10',
+  },
+]
+
+export const currentUser = users[2]

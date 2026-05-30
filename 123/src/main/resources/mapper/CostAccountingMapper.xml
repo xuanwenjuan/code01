@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hardware.stamping.mapper.CostAccountingMapper">
+
+    <select id="queryPage" resultType="com.hardware.stamping.vo.CostAccountingVO">
+        SELECT
+            id,
+            accounting_date,
+            category_id,
+            category_name,
+            order_id,
+            order_no,
+            material_cost,
+            material_loss_cost,
+            mold_wear_cost,
+            labor_cost,
+            outsourcing_cost,
+            other_cost,
+            total_cost,
+            production_quantity,
+            unit_cost,
+            revenue,
+            profit,
+            profit_margin,
+            remark,
+            create_time,
+            update_time
+        FROM cost_accounting
+        WHERE deleted = 0
+        <if test="query.categoryId != null">
+            AND category_id = #{query.categoryId}
+        </if>
+        <if test="query.orderId != null">
+            AND order_id = #{query.orderId}
+        </if>
+        <if test="query.startDate != null">
+            AND accounting_date >= #{query.startDate}
+        </if>
+        <if test="query.endDate != null">
+            AND accounting_date <= #{query.endDate}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

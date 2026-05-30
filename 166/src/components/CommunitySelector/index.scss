@@ -1,0 +1,54 @@
+.community-drawer {
+  :global {
+    .ant-drawer-body {
+      padding: 0;
+    }
+  }
+
+  .community-item {
+    padding: 16px 24px;
+    cursor: pointer;
+    border-bottom: 1px solid $border-color;
+    transition: $transition;
+
+    &:hover {
+      background: $bg-color;
+    }
+
+    &.active {
+      background: rgba($primary-color, 0.05);
+      border-left: 3px solid $primary-color;
+    }
+
+    .community-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .current-tag {
+        background: $primary-color;
+        color: $white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+    }
+
+    .community-desc {
+      p {
+        margin: 4px 0;
+        color: $text-secondary;
+        font-size: 13px;
+
+        :global(.anticon) {
+          margin-right: 4px;
+        }
+      }
+
+      .leader-info {
+        display: flex;
+        gap: 16px;
+      }
+    }
+  }
+}

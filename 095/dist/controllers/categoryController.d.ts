@@ -1,0 +1,13 @@
+import { Request, Response, NextFunction } from 'express';
+import Category from '../models/Category';
+export declare const createCategoryValidation: import("express-validator").ValidationChain[];
+export declare const updateCategoryValidation: import("express-validator").ValidationChain[];
+export declare const hasDiscontinuedAncestor: (categoryId: number | null) => Promise<boolean>;
+export declare const getCategoryChain: (categoryId: number | null) => Promise<Category[]>;
+export declare const createCategory: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getCategoryTree: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getCategoryList: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getCategoryById: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updateCategory: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const deleteCategory: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const batchUpdateCategoryStatus: (req: Request, res: Response, next: NextFunction) => Promise<void>;

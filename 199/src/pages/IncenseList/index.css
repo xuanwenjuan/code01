@@ -1,0 +1,66 @@
+.incense-list-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: calc(100vh - 64px);
+}
+
+.list-header {
+  margin-bottom: 32px;
+}
+
+.list-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 20px;
+}
+
+.list-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.category-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #fff;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e8e8e8;
+  font-size: 14px;
+}
+
+.category-tab:hover {
+  background: #f5f5f5;
+  border-color: #d4af37;
+}
+
+.category-tab.active {
+  background: linear-gradient(135deg, #d4af37 0%, #f0e68c 100%);
+  border-color: #d4af37;
+  color: #fff;
+  font-weight: 500;
+}
+
+.incense-grid {
+  margin-bottom: 32px;
+}
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}

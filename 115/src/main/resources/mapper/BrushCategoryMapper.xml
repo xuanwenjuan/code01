@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zongshi.brush.mapper.BrushCategoryMapper">
+
+    <select id="selectCategoryTree" resultType="com.zongshi.brush.entity.BrushCategory">
+        SELECT * FROM brush_category
+        WHERE is_deleted = 0
+        <if test="parentId != null">
+            AND parent_id = #{parentId}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY sort_order ASC, create_time DESC
+    </select>
+
+    <select id="selectChildrenById" resultType="com.zongshi.brush.entity.BrushCategory">
+        WITH RECURSIVE category_cte AS (
+            SELECT * FROM brush_category WHERE id = #{id} AND is_deleted = 0
+            UNION ALL
+            SELECT c.* FROM brush_category c
+            INNER JOIN category_cte ct ON c.parent_id = ct.id
+            WHERE c.is_deleted = 0
+        )
+        SELECT * FROM category_cte WHERE id != #{id}
+    </select>
+
+</mapper>

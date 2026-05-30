@@ -1,0 +1,71 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+  border: none;
+  min-height: 100vh;
+  display: block;
+}
+
+.ant-card {
+  border-radius: 12px;
+}
+
+.ant-btn-primary {
+  background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+  border: none;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, #d93636 0%, #a80000 100%) !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #c41e3a !important;
+}
+
+.ant-tabs-ink-bar {
+  background: #c41e3a !important;
+}
+
+.ant-menu-item-selected {
+  background-color: rgba(196, 30, 58, 0.1) !important;
+  color: #c41e3a !important;
+}
+
+.ant-tag-checkable-checked {
+  background: #c41e3a !important;
+  border-color: #c41e3a !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c41e3a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a80000;
+}

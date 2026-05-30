@@ -1,0 +1,11 @@
+import { Request, Response, NextFunction } from 'express';
+export declare const createUserValidation: import("express-validator").ValidationChain[];
+export declare const updateUserValidation: import("express-validator").ValidationChain[];
+export declare const updatePasswordValidation: import("express-validator").ValidationChain[];
+export declare const createUser: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getUserList: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getUserById: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updateUser: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updatePassword: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const toggleUserStatus: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const deleteUser: (req: Request, res: Response, next: NextFunction) => Promise<void>;

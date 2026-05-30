@@ -1,0 +1,221 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  font-size: 14px;
+  color: #606266;
+  background-color: #f5f7fa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: #409eff;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #303133;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .el-icon {
+    color: #409eff;
+  }
+}
+
+.price {
+  color: #f56c6c;
+  font-weight: 600;
+}
+
+.price-unit {
+  font-size: 12px;
+  font-weight: normal;
+  color: #909399;
+  margin-left: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f7fa;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dcdfe6;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c0c4cc;
+}
+
+.el-button {
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.el-input__wrapper,
+.el-select__wrapper,
+.el-textarea__inner {
+  border-radius: 6px;
+}
+
+.el-card {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.el-dialog {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.el-dialog__header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f5f7fa;
+  margin-right: 0;
+}
+
+.el-dialog__title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.el-dialog__body {
+  padding: 24px;
+}
+
+.el-dialog__footer {
+  padding: 16px 24px;
+  border-top: 1px solid #f5f7fa;
+}
+
+.el-tag {
+  border-radius: 4px;
+}
+
+.el-breadcrumb {
+  font-size: 14px;
+
+  .el-breadcrumb__item:last-child .el-breadcrumb__inner {
+    color: #409eff;
+    font-weight: 500;
+  }
+}
+
+.el-pagination {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+
+  .el-pager li {
+    border-radius: 4px;
+    margin: 0 2px;
+    min-width: 32px;
+    height: 32px;
+    line-height: 30px;
+  }
+
+  .btn-prev,
+  .btn-next {
+    border-radius: 4px;
+    min-width: 32px;
+    height: 32px;
+    line-height: 30px;
+    margin: 0 2px;
+  }
+}
+
+.el-form-item__label {
+  font-weight: 500;
+}
+
+.el-message {
+  border-radius: 8px;
+}
+
+.el-message-box {
+  border-radius: 12px;
+}
+
+.el-notification {
+  border-radius: 8px;
+}
+
+.el-loading-spinner .path {
+  stroke: #409eff;
+}
+
+.el-loading-text {
+  color: #409eff;
+}

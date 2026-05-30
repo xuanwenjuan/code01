@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zongshi.brush.mapper.ProductionOrderMapper">
+
+    <select id="selectTimeoutOrders" resultType="com.zongshi.brush.entity.ProductionOrder">
+        SELECT * FROM production_order
+        WHERE is_deleted = 0 AND is_timeout = 0
+        AND order_status IN
+        <foreach collection="statusList" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+        AND expect_finish_time &lt; NOW()
+    </select>
+
+</mapper>

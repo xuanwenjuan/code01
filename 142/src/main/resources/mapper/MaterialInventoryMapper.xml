@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spindle.manage.mapper.MaterialInventoryMapper">
+
+    <select id="queryByConditions" resultType="com.spindle.manage.entity.MaterialInventory">
+        SELECT * FROM material_inventory
+        <where>
+            is_deleted = 0
+            <if test="dto.materialName != null and dto.materialName != ''">
+                AND material_name LIKE CONCAT('%', #{dto.materialName}, '%')
+            </if>
+            <if test="dto.materialType != null and dto.materialType != ''">
+                AND material_type = #{dto.materialType}
+            </if>
+            <if test="dto.specification != null and dto.specification != ''">
+                AND specification LIKE CONCAT('%', #{dto.specification}, '%')
+            </if>
+            <if test="dto.batchNo != null and dto.batchNo != ''">
+                AND batch_no LIKE CONCAT('%', #{dto.batchNo}, '%')
+            </if>
+            <if test="dto.inventoryStatus != null">
+                AND inventory_status = #{dto.inventoryStatus}
+            </if>
+            <if test="dto.minQuantity != null">
+                AND quantity >= #{dto.minQuantity}
+            </if>
+            <if test="dto.maxQuantity != null">
+                AND quantity <= #{dto.maxQuantity}
+            </if>
+            <if test="dto.minUnitPrice != null">
+                AND unit_price >= #{dto.minUnitPrice}
+            </if>
+            <if test="dto.maxUnitPrice != null">
+                AND unit_price <= #{dto.maxUnitPrice}
+            </if>
+            <if test="dto.supplier != null and dto.supplier != ''">
+                AND supplier LIKE CONCAT('%', #{dto.supplier}, '%')
+            </if>
+            <if test="dto.warehouseLocation != null and dto.warehouseLocation != ''">
+                AND warehouse_location LIKE CONCAT('%', #{dto.warehouseLocation}, '%')
+            </if>
+            <if test="dto.createStartTime != null">
+                AND create_time >= #{dto.createStartTime}
+            </if>
+            <if test="dto.createEndTime != null">
+                AND create_time <= #{dto.createEndTime}
+            </if>
+        </where>
+        ORDER BY ${dto.orderBy} ${dto.orderType}
+    </select>
+
+    <select id="getAvailableQuantity" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(quantity), 0) FROM material_inventory
+        WHERE id = #{materialId} AND is_deleted = 0
+    </select>
+
+</mapper>

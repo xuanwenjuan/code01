@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: #333;
+  background-color: #faf8f5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #8b6914;
+  margin-bottom: 24px;
+  text-align: center;
+  position: relative;
+  
+  &::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #d4af37, #f0e68c);
+    margin: 12px auto 0;
+    border-radius: 2px;
+  }
+}
+
+.price {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.original-price {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 12px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37, #b8960c);
+  border: none;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  
+  &:hover {
+    background: linear-gradient(135deg, #e5c158, #c9a71d);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+  }
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.vintage-border {
+  border: 1px solid #e0d5b8;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #f5f0e1;
+  color: #8b6914;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-right: 6px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  
+  .el-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    color: #d4af37;
+  }
+  
+  p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+}
+
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}

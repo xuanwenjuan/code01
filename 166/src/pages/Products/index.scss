@@ -1,0 +1,138 @@
+.products-page {
+  padding: 20px 0;
+
+  .breadcrumb {
+    margin-bottom: 20px;
+    background: $white;
+    padding: 12px 20px;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+  }
+
+  .page-content {
+    display: flex;
+    gap: 20px;
+  }
+
+  .filter-sidebar {
+    flex: 0 0 240px;
+    background: $white;
+    border-radius: $border-radius;
+    padding: 20px;
+    box-shadow: $box-shadow;
+    height: fit-content;
+    position: sticky;
+    top: 84px;
+
+    .filter-section {
+      margin-bottom: 24px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .filter-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 12px;
+        color: $text-color;
+      }
+
+      .category-list {
+        .category-item {
+          padding: 10px 12px;
+          cursor: pointer;
+          border-radius: 6px;
+          margin-bottom: 4px;
+          transition: $transition;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          &:hover {
+            background: $bg-color;
+          }
+
+          &.active {
+            background: rgba($primary-color, 0.1);
+            color: $primary-color;
+            font-weight: 500;
+          }
+
+          .icon {
+            font-size: 18px;
+          }
+        }
+      }
+
+      .price-filter {
+        .price-range {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 8px;
+          color: $text-secondary;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .products-main {
+    flex: 1;
+    min-width: 0;
+
+    .products-header {
+      background: $white;
+      padding: 16px 20px;
+      border-radius: $border-radius;
+      margin-bottom: 16px;
+      box-shadow: $box-shadow;
+
+      .page-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+
+        .count {
+          font-size: 14px;
+          color: $text-secondary;
+          font-weight: normal;
+        }
+      }
+    }
+
+    .products-grid {
+      .ant-col {
+        display: flex;
+      }
+    }
+
+    .pagination-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 24px;
+      padding: 20px;
+      background: $white;
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
+    }
+
+    .empty-state {
+      background: $white;
+      padding: 60px 20px;
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .page-content {
+    flex-direction: column;
+  }
+
+  .filter-sidebar {
+    flex: none;
+    position: static;
+  }
+}

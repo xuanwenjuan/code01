@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.motor.core.mapper.MaterialMapper">
+
+    <resultMap id="BaseResultMap" type="com.motor.core.entity.po.MaterialPO">
+        <id column="id" property="id"/>
+        <result column="batch_code" property="batchCode"/>
+        <result column="material_name" property="materialName"/>
+        <result column="material_type" property="materialType"/>
+        <result column="specification" property="specification"/>
+        <result column="thickness" property="thickness"/>
+        <result column="width" property="width"/>
+        <result column="weight" property="weight"/>
+        <result column="unit" property="unit"/>
+        <result column="quantity" property="quantity"/>
+        <result column="warning_quantity" property="warningQuantity"/>
+        <result column="stock_status" property="stockStatus"/>
+        <result column="locked_quantity" property="lockedQuantity"/>
+        <result column="storage_location" property="storageLocation"/>
+        <result column="production_date" property="productionDate"/>
+        <result column="shelf_life_days" property="shelfLifeDays"/>
+        <result column="supplier" property="supplier"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="queryByConditions" resultMap="BaseResultMap">
+        SELECT * FROM material
+        <where>
+            deleted = 0
+            <if test="query.materialName != null and query.materialName != ''">
+                AND material_name LIKE CONCAT('%', #{query.materialName}, '%')
+            </if>
+            <if test="query.materialType != null and query.materialType != ''">
+                AND material_type = #{query.materialType}
+            </if>
+            <if test="query.specification != null and query.specification != ''">
+                AND specification LIKE CONCAT('%', #{query.specification}, '%')
+            </if>
+            <if test="query.stockStatus != null">
+                AND stock_status = #{query.stockStatus}
+            </if>
+            <if test="query.minQuantity != null">
+                AND quantity >= #{query.minQuantity}
+            </if>
+            <if test="query.maxQuantity != null">
+                AND quantity <= #{query.maxQuantity}
+            </if>
+            <if test="query.supplier != null and query.supplier != ''">
+                AND supplier LIKE CONCAT('%', #{query.supplier}, '%')
+            </if>
+            <if test="query.startProductionDate != null">
+                AND production_date >= #{query.startProductionDate}
+            </if>
+            <if test="query.endProductionDate != null">
+                AND production_date <= #{query.endProductionDate}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="lockMaterialStock">
+        UPDATE material
+        SET locked_quantity = IFNULL(locked_quantity, 0) + #{quantity},
+            update_time = NOW()
+        WHERE id = #{id}
+        AND quantity - IFNULL(locked_quantity, 0) >= #{quantity}
+    </update>
+
+    <update id="unlockMaterialStock">
+        UPDATE material
+        SET locked_quantity = IFNULL(locked_quantity, 0) - #{quantity},
+            update_time = NOW()
+        WHERE id = #{id}
+        AND locked_quantity >= #{quantity}
+    </update>
+
+    <update id="deductMaterialStock">
+        UPDATE material
+        SET quantity = quantity - #{quantity},
+            locked_quantity = locked_quantity - #{quantity},
+            update_time = NOW()
+        WHERE id = #{id}
+        AND locked_quantity >= #{quantity}
+    </update>
+
+</mapper>

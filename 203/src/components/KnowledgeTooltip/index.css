@@ -1,0 +1,46 @@
+.knowledge-tooltip-btn {
+  color: #faad14 !important;
+  padding: 0 4px;
+  height: auto;
+  line-height: 1;
+  font-size: 16px;
+}
+
+.knowledge-tooltip-btn:hover {
+  color: #d48806 !important;
+  background: transparent !important;
+}
+
+.knowledge-tooltip-overlay .ant-tooltip-inner {
+  background: #fff !important;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 0;
+  max-width: 360px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.knowledge-tooltip-overlay .ant-tooltip-arrow::before {
+  background: #fff !important;
+  border: 1px solid #e8e8e8;
+}
+
+.knowledge-tooltip-content {
+  padding: 16px;
+}
+
+.knowledge-tooltip-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.knowledge-tooltip-text {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}

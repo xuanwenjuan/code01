@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liquor.brewing.mapper.MaterialBatchMapper">
+
+    <resultMap id="MaterialBatchMap" type="com.liquor.brewing.entity.MaterialBatch">
+        <id column="id" property="id"/>
+        <result column="batch_code" property="batchCode"/>
+        <result column="material_id" property="materialId"/>
+        <result column="quantity" property="quantity"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="produce_date" property="produceDate"/>
+        <result column="expire_date" property="expireDate"/>
+        <result column="supplier" property="supplier"/>
+        <result column="warehouse_position" property="warehousePosition"/>
+        <result column="status" property="status"/>
+        <result column="days_to_expire" property="daysToExpire"/>
+        <result column="material_name" property="materialName"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="unit" property="unit"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="selectBatchPage" resultMap="MaterialBatchMap">
+        SELECT b.*, m.material_name, m.material_code, m.unit
+        FROM material_batch b
+        LEFT JOIN material m ON b.material_id = m.id
+        ${ew.customSqlSegment}
+        ORDER BY b.create_time DESC
+    </select>
+
+</mapper>

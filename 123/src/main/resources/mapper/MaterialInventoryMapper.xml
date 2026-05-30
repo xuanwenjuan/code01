@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hardware.stamping.mapper.MaterialInventoryMapper">
+
+    <select id="queryPage" resultType="com.hardware.stamping.vo.MaterialInventoryVO">
+        SELECT
+            id,
+            batch_code,
+            material_type,
+            specification,
+            thickness,
+            quantity,
+            unit,
+            unit_price,
+            total_price,
+            stock_status,
+            is_oxidizable,
+            storage_days,
+            production_date,
+            expiration_date,
+            supplier,
+            warehouse_location,
+            remark,
+            create_time,
+            update_time
+        FROM material_inventory
+        WHERE deleted = 0
+        <if test="query.materialType != null and query.materialType != ''">
+            AND material_type LIKE CONCAT('%', #{query.materialType}, '%')
+        </if>
+        <if test="query.specification != null and query.specification != ''">
+            AND specification LIKE CONCAT('%', #{query.specification}, '%')
+        </if>
+        <if test="query.stockStatus != null">
+            AND stock_status = #{query.stockStatus}
+        </if>
+        <if test="query.supplier != null and query.supplier != ''">
+            AND supplier LIKE CONCAT('%', #{query.supplier}, '%')
+        </if>
+        <if test="query.batchCode != null and query.batchCode != ''">
+            AND batch_code LIKE CONCAT('%', #{query.batchCode}, '%')
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

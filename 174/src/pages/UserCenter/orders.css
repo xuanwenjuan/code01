@@ -1,0 +1,33 @@
+.my-orders {
+  .order-tabs {
+    margin-bottom: 20px;
+  }
+  
+  .review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .review-service {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.my-reviews {
+  .review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .review-service {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.worker-orders {
+  /* 师傅端订单样式 */
+}

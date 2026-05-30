@@ -1,0 +1,1 @@
+import{R as a,b2 as t,B as E}from"./index-CsIY-Iqj.js";import{E as m}from"./index-DEDhO1Ri.js";const p=({description:r="暂无数据",actionText:s,onAction:e})=>t.jsx("div",{className:"empty-state",children:t.jsx(m,{description:r,image:m.PRESENTED_IMAGE_SIMPLE,children:s&&e&&t.jsx(E,{type:"primary",onClick:e,children:s})})}),c=a.memo(p);export{c as E};

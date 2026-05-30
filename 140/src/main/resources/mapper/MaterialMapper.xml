@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gearbox.manage.mapper.MaterialMapper">
+
+    <resultMap id="BaseResultMap" type="com.gearbox.manage.entity.Material">
+        <id column="id" property="id"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="material_name" property="materialName"/>
+        <result column="material_type" property="materialType"/>
+        <result column="specification" property="specification"/>
+        <result column="unit" property="unit"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="quantity" property="quantity"/>
+        <result column="warning_quantity" property="warningQuantity"/>
+        <result column="status" property="status"/>
+        <result column="is_easy_oxidize" property="isEasyOxidize"/>
+        <result column="rustproof_days" property="rustproofDays"/>
+        <result column="supplier" property="supplier"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="queryByConditions" resultMap="BaseResultMap">
+        SELECT * FROM material
+        WHERE deleted = 0
+        <if test="dto.materialCode != null and dto.materialCode != ''">
+            AND material_code LIKE CONCAT('%', #{dto.materialCode}, '%')
+        </if>
+        <if test="dto.materialName != null and dto.materialName != ''">
+            AND material_name LIKE CONCAT('%', #{dto.materialName}, '%')
+        </if>
+        <if test="dto.materialType != null and dto.materialType != ''">
+            AND material_type = #{dto.materialType}
+        </if>
+        <if test="dto.specification != null and dto.specification != ''">
+            AND specification LIKE CONCAT('%', #{dto.specification}, '%')
+        </if>
+        <if test="dto.status != null and dto.status != ''">
+            AND status = #{dto.status}
+        </if>
+        <if test="dto.supplier != null and dto.supplier != ''">
+            AND supplier LIKE CONCAT('%', #{dto.supplier}, '%')
+        </if>
+        <if test="dto.minQuantity != null">
+            AND quantity >= #{dto.minQuantity}
+        </if>
+        <if test="dto.maxQuantity != null">
+            AND quantity <= #{dto.maxQuantity}
+        </if>
+        <if test="dto.minUnitPrice != null">
+            AND unit_price >= #{dto.minUnitPrice}
+        </if>
+        <if test="dto.maxUnitPrice != null">
+            AND unit_price <= #{dto.maxUnitPrice}
+        </if>
+        ORDER BY
+        <choose>
+            <when test="dto.sortField == 'materialCode'">
+                material_code
+            </when>
+            <when test="dto.sortField == 'materialName'">
+                material_name
+            </when>
+            <when test="dto.sortField == 'quantity'">
+                quantity
+            </when>
+            <when test="dto.sortField == 'unitPrice'">
+                unit_price
+            </when>
+            <otherwise>
+                create_time
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="dto.sortOrder == 'asc'">
+                ASC
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

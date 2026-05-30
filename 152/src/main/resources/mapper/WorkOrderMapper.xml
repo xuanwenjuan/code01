@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evparts.mapper.WorkOrderMapper">
+
+    <resultMap id="WorkOrderDetailMap" type="com.evparts.entity.WorkOrder">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="product_id" property="productId"/>
+        <result column="plan_quantity" property="planQuantity"/>
+        <result column="actual_quantity" property="actualQuantity"/>
+        <result column="bad_quantity" property="badQuantity"/>
+        <result column="priority" property="priority"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="plan_start_date" property="planStartDate"/>
+        <result column="plan_end_date" property="planEndDate"/>
+        <result column="actual_start_time" property="actualStartTime"/>
+        <result column="actual_end_time" property="actualEndTime"/>
+        <result column="workshop" property="workshop"/>
+        <result column="line" property="line"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_code" property="productCode"/>
+        <result column="specification" property="specification"/>
+        <result column="category_name" property="productCode"/>
+        <result column="operator_name" property="operatorName"/>
+    </resultMap>
+
+    <resultMap id="ProcessDetailMap" type="com.evparts.entity.WorkOrderProcess">
+        <id column="process_id" property="id"/>
+        <result column="work_order_id" property="workOrderId"/>
+        <result column="process_code" property="processCode"/>
+        <result column="process_name" property="processName"/>
+        <result column="process_type" property="processType"/>
+        <result column="sort_order" property="sortOrder"/>
+        <result column="process_status" property="processStatus"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="qualified_quantity" property="qualifiedQuantity"/>
+        <result column="bad_quantity" property="badQuantity"/>
+        <result column="process_operator_name" property="operatorName"/>
+    </resultMap>
+
+    <resultMap id="MaterialDetailMap" type="com.evparts.entity.WorkOrderMaterial">
+        <id column="wm_id" property="id"/>
+        <result column="work_order_id" property="workOrderId"/>
+        <result column="material_id" property="materialId"/>
+        <result column="material_stock_id" property="materialStockId"/>
+        <result column="plan_quantity" property="planQuantity"/>
+        <result column="actual_quantity" property="actualQuantity"/>
+        <result column="wm_unit_price" property="unitPrice"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="material_name" property="materialName"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="m_specification" property="specification"/>
+        <result column="m_unit" property="unit"/>
+        <result column="batch_no" property="batchNo"/>
+    </resultMap>
+
+    <select id="getWorkOrderDetailPage" resultMap="WorkOrderDetailMap">
+        SELECT
+            wo.*,
+            p.product_name,
+            p.product_code,
+            p.specification,
+            pc.category_name,
+            u.real_name AS operator_name
+        FROM work_order wo
+        LEFT JOIN product p ON wo.product_id = p.id
+        LEFT JOIN product_category pc ON p.category_id = pc.id
+        LEFT JOIN sys_user u ON wo.operator_id = u.id
+        <where>
+            wo.deleted = 0
+            <if test="orderNo != null and orderNo != ''">
+                AND wo.order_no LIKE CONCAT('%', #{orderNo}, '%')
+            </if>
+            <if test="productName != null and productName != ''">
+                AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+            </if>
+            <if test="categoryId != null">
+                AND p.category_id = #{categoryId}
+            </if>
+            <if test="orderStatus != null and orderStatus != ''">
+                AND wo.order_status = #{orderStatus}
+            </if>
+            <if test="workshop != null and workshop != ''">
+                AND wo.workshop = #{workshop}
+            </if>
+            <if test="operatorId != null">
+                AND wo.operator_id = #{operatorId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND wo.plan_start_date >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND wo.plan_end_date &lt;= #{endDate}
+            </if>
+        </where>
+        ORDER BY wo.priority DESC, wo.create_time DESC
+    </select>
+
+    <select id="getWorkOrderProcesses" resultMap="ProcessDetailMap">
+        SELECT
+            wop.id AS process_id,
+            wop.*,
+            u.real_name AS process_operator_name
+        FROM work_order_process wop
+        LEFT JOIN sys_user u ON wop.operator_id = u.id
+        WHERE wop.work_order_id = #{workOrderId}
+          AND wop.deleted = 0
+        ORDER BY wop.sort_order ASC
+    </select>
+
+    <select id="getWorkOrderMaterials" resultMap="MaterialDetailMap">
+        SELECT
+            wom.id AS wm_id,
+            wom.*,
+            m.material_name,
+            m.material_code,
+            m.specification AS m_specification,
+            m.unit AS m_unit,
+            ms.batch_no
+        FROM work_order_material wom
+        LEFT JOIN material m ON wom.material_id = m.id
+        LEFT JOIN material_stock ms ON wom.material_stock_id = ms.id
+        WHERE wom.work_order_id = #{workOrderId}
+          AND wom.deleted = 0
+    </select>
+
+    <select id="getWorkOrderStats" resultType="java.util.Map">
+        SELECT
+            COUNT(*) AS total_count,
+            SUM(CASE WHEN order_status = 'PENDING' THEN 1 ELSE 0 END) AS pending_count,
+            SUM(CASE WHEN order_status = 'IN_PRODUCTION' THEN 1 ELSE 0 END) AS in_production_count,
+            SUM(CASE WHEN order_status = 'COMPLETED' THEN 1 ELSE 0 END) AS completed_count,
+            SUM(CASE WHEN order_status = 'SUSPENDED' THEN 1 ELSE 0 END) AS suspended_count,
+            SUM(plan_quantity) AS total_plan_qty,
+            SUM(actual_quantity) AS total_actual_qty,
+            SUM(bad_quantity) AS total_bad_qty
+        FROM work_order
+        WHERE deleted = 0
+        <if test="startDate != null and startDate != ''">
+            AND create_time >= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND create_time &lt;= #{endDate}
+        </if>
+    </select>
+
+    <update id="batchUpdateStatus">
+        UPDATE work_order
+        SET order_status = #{targetStatus},
+            update_time = NOW()
+        <where>
+            id IN
+            <foreach collection="ids" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+            <if test="sourceStatus != null and sourceStatus != ''">
+                AND order_status = #{sourceStatus}
+            </if>
+        </where>
+    </update>
+
+</mapper>

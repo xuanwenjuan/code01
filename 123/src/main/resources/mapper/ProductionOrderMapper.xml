@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hardware.stamping.mapper.ProductionOrderMapper">
+
+    <select id="queryPage" resultType="com.hardware.stamping.vo.ProductionOrderVO">
+        SELECT
+            id,
+            order_no,
+            category_id,
+            category_name,
+            quantity,
+            material_id,
+            material_batch_code,
+            mold_no,
+            machine_no,
+            status,
+            plan_start_time,
+            actual_start_time,
+            actual_end_time,
+            production_hours,
+            qualified_quantity,
+            scrap_quantity,
+            operator,
+            technician,
+            remark,
+            create_time,
+            update_time
+        FROM production_order
+        WHERE deleted = 0
+        <if test="query.orderNo != null and query.orderNo != ''">
+            AND order_no LIKE CONCAT('%', #{query.orderNo}, '%')
+        </if>
+        <if test="query.categoryId != null">
+            AND category_id = #{query.categoryId}
+        </if>
+        <if test="query.status != null">
+            AND status = #{query.status}
+        </if>
+        <if test="query.operator != null and query.operator != ''">
+            AND operator LIKE CONCAT('%', #{query.operator}, '%')
+        </if>
+        <if test="query.startTime != null">
+            AND create_time >= #{query.startTime}
+        </if>
+        <if test="query.endTime != null">
+            AND create_time <= #{query.endTime}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.textile.production.mapper.ProductionCostMapper">
+
+    <resultMap id="CostDetailMap" type="com.textile.production.entity.ProductionCost">
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="material_cost" property="materialCost"/>
+        <result column="equipment_cost" property="equipmentCost"/>
+        <result column="labor_cost" property="laborCost"/>
+        <result column="dye_cost" property="dyeCost"/>
+        <result column="defective_cost" property="defectiveCost"/>
+        <result column="other_cost" property="otherCost"/>
+        <result column="total_cost" property="totalCost"/>
+        <result column="unit_cost" property="unitCost"/>
+        <result column="settlement_status" property="settlementStatus"/>
+        <result column="settlement_time" property="settlementTime"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="getCostDetailReport" resultType="java.util.Map">
+        SELECT
+            pc.id,
+            pc.order_id,
+            pc.material_cost,
+            pc.equipment_cost,
+            pc.labor_cost,
+            pc.dye_cost,
+            pc.defective_cost,
+            pc.other_cost,
+            pc.total_cost,
+            pc.unit_cost,
+            pc.settlement_status,
+            pc.settlement_time,
+            po.order_no,
+            po.fabric_name,
+            po.actual_quantity,
+            po.unit,
+            po.actual_end_date,
+            fc.name AS category_name
+        FROM production_cost pc
+        INNER JOIN production_order po ON pc.order_id = po.id
+        LEFT JOIN fabric_category fc ON po.category_id = fc.id
+        WHERE pc.deleted = 0
+        <where>
+            <if test="settlementStatus != null">
+                AND pc.settlement_status = #{settlementStatus}
+            </if>
+            <if test="startDate != null">
+                AND pc.create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND pc.create_time <= #{endDate}
+            </if>
+        </where>
+        ORDER BY pc.create_time DESC
+    </select>
+
+    <select id="getCostAnalysisReport" resultType="java.util.Map">
+        SELECT
+            DATE_FORMAT(pc.create_time, '%Y-%m') AS report_month,
+            COUNT(pc.id) AS order_count,
+            SUM(pc.material_cost) AS total_material_cost,
+            SUM(pc.equipment_cost) AS total_equipment_cost,
+            SUM(pc.labor_cost) AS total_labor_cost,
+            SUM(pc.dye_cost) AS total_dye_cost,
+            SUM(pc.defective_cost) AS total_defective_cost,
+            SUM(pc.other_cost) AS total_other_cost,
+            SUM(pc.total_cost) AS total_cost,
+            AVG(pc.unit_cost) AS avg_unit_cost,
+            SUM(po.actual_quantity) AS total_output_quantity
+        FROM production_cost pc
+        INNER JOIN production_order po ON pc.order_id = po.id
+        WHERE pc.deleted = 0 AND po.status = 'COMPLETED'
+        <where>
+            <if test="startDate != null">
+                AND pc.create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND pc.create_time <= #{endDate}
+            </if>
+        </where>
+        GROUP BY report_month
+        ORDER BY report_month DESC
+    </select>
+
+    <select id="getCostByCategory" resultType="java.util.Map">
+        SELECT
+            fc.id AS category_id,
+            fc.name AS category_name,
+            COUNT(pc.id) AS order_count,
+            SUM(pc.total_cost) AS total_cost,
+            AVG(pc.unit_cost) AS avg_unit_cost,
+            SUM(po.actual_quantity) AS total_quantity
+        FROM production_cost pc
+        INNER JOIN production_order po ON pc.order_id = po.id
+        INNER JOIN fabric_category fc ON po.category_id = fc.id
+        WHERE pc.deleted = 0 AND po.status = 'COMPLETED'
+        <where>
+            <if test="startDate != null">
+                AND pc.create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND pc.create_time <= #{endDate}
+            </if>
+        </where>
+        GROUP BY fc.id, fc.name
+        ORDER BY total_cost DESC
+    </select>
+
+    <select id="getMaterialUsageTrace" resultType="java.util.Map">
+        SELECT
+            om.id,
+            om.order_id,
+            po.order_no,
+            po.fabric_name,
+            rm.name AS material_name,
+            rm.type AS material_type,
+            rm.specification,
+            om.plan_quantity,
+            om.actual_quantity,
+            om.unit,
+            om.unit_price,
+            om.total_price,
+            rmb.batch_code,
+            rmb.supplier
+        FROM order_material om
+        INNER JOIN production_order po ON om.order_id = po.id
+        INNER JOIN raw_material rm ON om.material_id = rm.id
+        LEFT JOIN raw_material_batch rmb ON om.batch_id = rmb.id
+        WHERE om.deleted = 0
+        <where>
+            <if test="orderId != null">
+                AND om.order_id = #{orderId}
+            </if>
+            <if test="materialId != null">
+                AND om.material_id = #{materialId}
+            </if>
+            <if test="startDate != null">
+                AND om.create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND om.create_time <= #{endDate}
+            </if>
+        </where>
+        ORDER BY om.create_time DESC
+    </select>
+</mapper>

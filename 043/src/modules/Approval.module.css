@@ -1,0 +1,57 @@
+.container {
+  height: 100%;
+  padding: 0;
+}
+
+.mainCard {
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.mainCard :global(.ant-card-body) {
+  height: calc(100% - 57px);
+  overflow: auto;
+}
+
+.approvalInfo {
+  align-items: center;
+}
+
+.approvalTitle {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.approvalMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.statusTag {
+  font-size: 12px;
+}
+
+.detailHeader {
+  padding: 16px;
+  background: #f5f7fa;
+  border-radius: 8px;
+}
+
+.detailSection {
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sectionTitle {
+  margin-bottom: 16px !important;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .mainCard :global(.ant-card-body) {
+    padding: 12px;
+  }
+}

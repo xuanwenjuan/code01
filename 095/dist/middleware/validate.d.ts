@@ -1,0 +1,24 @@
+import { Request, Response, NextFunction } from 'express';
+import { ValidationChain } from 'express-validator';
+export declare const validate: (validations: ValidationChain[]) => (req: Request, res: Response, next: NextFunction) => Promise<void | Response<any, Record<string, any>>>;
+export declare const validateId: (field?: string) => ValidationChain;
+export declare const validatePagination: () => ValidationChain[];
+export declare const validateDateRange: (startField?: string, endField?: string) => ValidationChain[];
+export declare const commonValidations: {
+    requiredString: (field: string, min?: number, max?: number) => ValidationChain;
+    optionalString: (field: string, max?: number) => ValidationChain;
+    requiredInt: (field: string, min?: number) => ValidationChain;
+    optionalInt: (field: string, min?: number) => ValidationChain;
+    requiredFloat: (field: string, min?: number) => ValidationChain;
+    optionalFloat: (field: string, min?: number) => ValidationChain;
+    requiredEmail: (field?: string) => ValidationChain;
+    requiredPhone: (field?: string) => ValidationChain;
+    requiredEnum: (field: string, enumValues: any[], enumName?: string) => ValidationChain;
+    optionalEnum: (field: string, enumValues: any[], enumName?: string) => ValidationChain;
+    requiredArray: (field: string, minLength?: number) => ValidationChain;
+    optionalArray: (field: string) => ValidationChain;
+    requiredBoolean: (field: string) => ValidationChain;
+    optionalBoolean: (field: string) => ValidationChain;
+    requiredUrl: (field: string) => ValidationChain;
+    optionalUrl: (field: string) => ValidationChain;
+};

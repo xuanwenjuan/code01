@@ -1,0 +1,58 @@
+.admin-page {
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.admin-layout {
+  min-height: 100vh;
+}
+
+.admin-sider {
+  background: #001529;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+.admin-logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-menu {
+  border-right: none;
+}
+
+.admin-content {
+  margin-left: 220px;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.dashboard .ant-card {
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .admin-sider {
+    width: 80px !important;
+  }
+
+  .admin-logo span {
+    display: none;
+  }
+
+  .admin-content {
+    margin-left: 80px;
+    padding: 16px;
+  }
+}

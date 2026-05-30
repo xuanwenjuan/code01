@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.textile.production.mapper.ProductionOrderMapper">
+
+    <resultMap id="OrderWithProcessMap" type="com.textile.production.entity.ProductionOrder">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="fabric_name" property="fabricName"/>
+        <result column="plan_quantity" property="planQuantity"/>
+        <result column="actual_quantity" property="actualQuantity"/>
+        <result column="unit" property="unit"/>
+        <result column="priority" property="priority"/>
+        <result column="status" property="status"/>
+        <result column="current_process" property="currentProcess"/>
+        <result column="process_index" property="processIndex"/>
+        <result column="plan_start_date" property="planStartDate"/>
+        <result column="plan_end_date" property="planEndDate"/>
+        <result column="actual_start_date" property="actualStartDate"/>
+        <result column="actual_end_date" property="actualEndDate"/>
+        <result column="timeout" property="timeout"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="children" ofType="com.textile.production.entity.ProductionProcess">
+            <id column="process_id" property="id"/>
+            <result column="process_name" property="processName"/>
+            <result column="process_index" property="processIndex"/>
+            <result column="process_status" property="status"/>
+            <result column="start_time" property="startTime"/>
+            <result column="end_time" property="endTime"/>
+            <result column="output_quantity" property="outputQuantity"/>
+            <result column="defective_quantity" property="defectiveQuantity"/>
+            <result column="equipment" property="equipment"/>
+        </collection>
+    </resultMap>
+
+    <select id="getOrderWithProcesses" resultMap="OrderWithProcessMap">
+        SELECT
+            o.id,
+            o.order_no,
+            o.category_id,
+            o.fabric_name,
+            o.plan_quantity,
+            o.actual_quantity,
+            o.unit,
+            o.priority,
+            o.status,
+            o.current_process,
+            o.process_index,
+            o.plan_start_date,
+            o.plan_end_date,
+            o.actual_start_date,
+            o.actual_end_date,
+            o.timeout,
+            o.operator_id,
+            o.remark,
+            o.create_time,
+            p.id AS process_id,
+            p.process_name,
+            p.process_index,
+            p.status AS process_status,
+            p.start_time,
+            p.end_time,
+            p.output_quantity,
+            p.defective_quantity,
+            p.equipment
+        FROM production_order o
+        LEFT JOIN production_process p ON o.id = p.order_id
+        <where>
+            o.deleted = 0
+            <if test="id != null">
+                AND o.id = #{id}
+            </if>
+            <if test="status != null and status != ''">
+                AND o.status = #{status}
+            </if>
+        </where>
+        ORDER BY o.priority DESC, o.create_time DESC, p.process_index ASC
+    </select>
+
+    <select id="getOrderProgressStatistics" resultType="java.util.Map">
+        SELECT
+            status,
+            COUNT(*) AS order_count,
+            SUM(plan_quantity) AS total_plan_quantity,
+            SUM(actual_quantity) AS total_actual_quantity
+        FROM production_order
+        WHERE deleted = 0
+        <where>
+            <if test="startDate != null">
+                AND create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND create_time <= #{endDate}
+            </if>
+        </where>
+        GROUP BY status
+        ORDER BY status
+    </select>
+
+    <select id="getOrderEfficiencyReport" resultType="java.util.Map">
+        SELECT
+            o.id,
+            o.order_no,
+            o.fabric_name,
+            o.plan_quantity,
+            o.actual_quantity,
+            o.unit,
+            o.status,
+            o.actual_start_date,
+            o.actual_end_date,
+            TIMESTAMPDIFF(HOUR, o.actual_start_date, o.actual_end_date) AS production_hours,
+            CASE WHEN TIMESTAMPDIFF(HOUR, o.actual_start_date, o.actual_end_date) > 0
+                THEN o.actual_quantity / TIMESTAMPDIFF(HOUR, o.actual_start_date, o.actual_end_date)
+                ELSE 0 END AS efficiency,
+            fc.name AS category_name,
+            su.real_name AS operator_name
+        FROM production_order o
+        LEFT JOIN fabric_category fc ON o.category_id = fc.id
+        LEFT JOIN sys_user su ON o.operator_id = su.id
+        WHERE o.deleted = 0 AND o.status = 'COMPLETED'
+        <where>
+            <if test="startDate != null">
+                AND o.actual_end_date >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND o.actual_end_date <= #{endDate}
+            </if>
+        </where>
+        ORDER BY o.actual_end_date DESC
+    </select>
+
+    <select id="getDefectiveStatistics" resultType="java.util.Map">
+        SELECT
+            o.id,
+            o.order_no,
+            o.fabric_name,
+            p.process_name,
+            p.output_quantity,
+            p.defective_quantity,
+            CASE WHEN p.output_quantity > 0
+                THEN ROUND(p.defective_quantity * 100 / p.output_quantity, 2)
+                ELSE 0 END AS defective_rate,
+            p.end_time AS process_end_time
+        FROM production_process p
+        INNER JOIN production_order o ON p.order_id = o.id
+        WHERE p.deleted = 0 AND o.deleted = 0 AND p.defective_quantity > 0
+        <where>
+            <if test="startDate != null">
+                AND p.end_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND p.end_time <= #{endDate}
+            </if>
+        </where>
+        ORDER BY defective_rate DESC
+    </select>
+</mapper>

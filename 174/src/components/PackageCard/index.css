@@ -1,0 +1,92 @@
+.package-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.package-cover {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+}
+
+.package-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hot-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #ff7a45 0%, #ff4d4f 100%);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.save-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.package-info {
+  padding: 4px 0;
+}
+
+.package-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.package-desc {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.package-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.price-label {
+  font-size: 14px;
+  color: #999;
+}
+
+.current-price {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff4d4f;
+}
+
+.original-price {
+  font-size: 14px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.book-btn {
+  border-radius: 8px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 500;
+}

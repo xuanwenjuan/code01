@@ -1,0 +1,220 @@
+.technique-page {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.header-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.header-title-row .ant-typography {
+  margin-bottom: 0 !important;
+}
+
+.page-desc {
+  max-width: 800px;
+  margin: 16px auto 0;
+  font-size: 16px;
+  color: #666;
+  line-height: 1.8;
+}
+
+.technique-tabs {
+  margin-bottom: 32px;
+}
+
+.technique-tabs :global(.ant-tabs-nav) {
+  background: #fff;
+  padding: 0 24px;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 24px;
+}
+
+.technique-tabs :global(.ant-tabs-content-holder) {
+  background: transparent;
+}
+
+.process-section,
+.video-section,
+.material-section,
+.carving-section,
+.artisans-section,
+.works-section {
+  margin-bottom: 40px;
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-header .ant-typography {
+  margin-bottom: 0 !important;
+}
+
+.process-steps {
+  margin-bottom: 32px;
+}
+
+.step-card {
+  transition: all 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+}
+
+.step-card.active {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.step-image {
+  height: 180px;
+  object-fit: cover;
+}
+
+.custom-badge .ant-badge-count {
+  background: #f0f0f0;
+  color: #666;
+  font-size: 12px;
+  box-shadow: none;
+  font-weight: normal;
+}
+
+.video-card {
+  transition: all 0.3s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.video-placeholder {
+  height: 300px;
+  background: linear-gradient(135deg, #001529 0%, #1a3a5c 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.video-placeholder:hover {
+  opacity: 0.9;
+}
+
+.video-placeholder p {
+  margin: 16px 0 0;
+  font-size: 18px;
+}
+
+.material-collapse {
+  background: #fff;
+}
+
+.material-collapse :global(.ant-collapse-item) {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.material-collapse :global(.ant-collapse-header) {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.material-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.carving-timeline {
+  padding-left: 24px;
+}
+
+.carving-step-card {
+  transition: all 0.3s ease;
+}
+
+.carving-step-card:hover {
+  border-color: #1890ff;
+}
+
+.experience-card {
+  margin-top: 24px;
+}
+
+.footer-knowledge {
+  background: linear-gradient(135deg, #fffbe6 0%, #fff1b8 100%);
+  padding: 20px 24px;
+  border-radius: 8px;
+  margin-top: 32px;
+  border-left: 4px solid #faad14;
+}
+
+.step-detail-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.step-detail-content {
+  padding: 0 8px;
+}
+
+.step-detail-info {
+  background: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .technique-page {
+    padding: 12px;
+  }
+
+  .process-steps {
+    display: none;
+  }
+
+  .video-placeholder {
+    height: 200px;
+  }
+
+  .step-detail-image {
+    height: 200px;
+  }
+
+  .material-image {
+    height: 150px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

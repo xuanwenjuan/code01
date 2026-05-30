@@ -1,0 +1,141 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1677ff 0%, #69b1ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-container {
+  display: flex;
+  width: 100%;
+  max-width: 960px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.login-left {
+  flex: 1;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #1677ff 0%, #0958d9 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.login-brand {
+  text-align: center;
+}
+
+.brand-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.brand-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.brand-subtitle {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.login-features {
+  margin-top: 40px;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.feature:last-child {
+  margin-bottom: 0;
+}
+
+.feature-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.feature h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.feature p {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.login-right {
+  width: 400px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.login-card {
+  width: 100%;
+  border: none;
+  box-shadow: none;
+}
+
+.login-tabs {
+  margin-bottom: 24px;
+}
+
+.login-btn {
+  height: 48px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.login-tips {
+  margin-top: 24px;
+  padding: 16px;
+  background: #f5f7fa;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #999;
+  line-height: 1.8;
+}
+
+.login-tips p {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+  
+  .login-left {
+    padding: 40px 24px;
+  }
+  
+  .login-right {
+    width: 100%;
+    padding: 24px;
+  }
+}

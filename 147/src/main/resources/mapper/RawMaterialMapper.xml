@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.household.management.mapper.RawMaterialMapper">
+
+    <resultMap id="RawMaterialResultMap" type="com.household.management.entity.RawMaterial">
+        <id column="id" property="id"/>
+        <result column="material_name" property="materialName"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="material_type" property="materialType"/>
+        <result column="material_texture" property="materialTexture"/>
+        <result column="specification" property="specification"/>
+        <result column="unit" property="unit"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="warn_stock" property="warnStock"/>
+        <result column="is_moisture_sensitive" property="isMoistureSensitive"/>
+        <result column="moisture_warning_days" property="moistureWarningDays"/>
+        <result column="status" property="status"/>
+        <result column="current_stock" property="currentStock"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="selectMaterialPageWithConditions" resultMap="RawMaterialResultMap">
+        SELECT rm.*, COALESCE(SUM(rms.quantity), 0) as current_stock
+        FROM raw_material rm
+        LEFT JOIN raw_material_stock rms ON rm.id = rms.material_id AND rms.status = 1 AND rms.deleted = 0
+        WHERE rm.deleted = 0
+        <if test="materialType != null and materialType != ''">
+            AND rm.material_type = #{materialType}
+        </if>
+        <if test="materialTexture != null and materialTexture != ''">
+            AND rm.material_texture = #{materialTexture}
+        </if>
+        <if test="status != null">
+            <choose>
+                <when test="status == 1">
+                    AND rm.status = 1
+                </when>
+                <when test="status == 2">
+                    AND rm.status = 2
+                </when>
+                <when test="status == 3">
+                    AND rm.status = 3
+                </when>
+            </choose>
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (rm.material_name LIKE CONCAT('%', #{keyword}, '%')
+                 OR rm.material_code LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        GROUP BY rm.id
+        ORDER BY rm.create_time DESC
+    </select>
+
+</mapper>

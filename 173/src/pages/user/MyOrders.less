@@ -1,0 +1,91 @@
+.my-orders-page {
+  .stats-section {
+    margin-bottom: 24px;
+
+    .stat-card {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-radius: 8px;
+      transition: all 0.3s;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-right: 16px;
+      }
+
+      .stat-content {
+        .stat-title {
+          margin: 0 0 4px 0;
+          color: #999;
+          font-size: 13px;
+        }
+
+        .stat-value {
+          margin: 0;
+          font-size: 24px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+  }
+
+  .table-card {
+    border-radius: 8px;
+
+    .ant-table-thead > tr > th {
+      background: #fafafa;
+      font-weight: 600;
+    }
+  }
+
+  .order-detail {
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .ant-descriptions-item-label {
+      width: 100px;
+      background: #fafafa;
+    }
+  }
+
+  .contact-modal {
+    .contact-info {
+      background: #f5f5f5;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+
+      p {
+        margin: 4px 0;
+      }
+    }
+  }
+}

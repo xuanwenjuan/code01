@@ -1,0 +1,75 @@
+.incense-card {
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.incense-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-cover {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.incense-card:hover .card-cover img {
+  transform: scale(1.05);
+}
+
+.card-tag-new,
+.card-tag-ancient {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.card-title span:first-child {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.card-price {
+  color: #f5222d;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.card-desc {
+  margin-top: 8px;
+}
+
+.card-desc p {
+  margin: 4px 0;
+  color: #666;
+  font-size: 13px;
+}
+
+.card-desc p:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.card-origin {
+  color: #999 !important;
+  font-size: 12px !important;
+}

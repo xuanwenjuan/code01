@@ -1,0 +1,174 @@
+.site-header {
+  background: $white;
+  padding: 0;
+  height: $header-height;
+  line-height: $header-height;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    @include flex-between;
+    height: 100%;
+  }
+
+  .logo {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .logo-icon {
+      font-size: 32px;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: $primary-color;
+      letter-spacing: 1px;
+    }
+  }
+
+  .community-selector {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 0 16px;
+    height: 36px;
+    line-height: 36px;
+    background: $bg-color;
+    border-radius: 18px;
+    transition: $transition;
+
+    &:hover {
+      background: #ebebeb;
+    }
+
+    .community-label {
+      color: $text-secondary;
+      font-size: 13px;
+    }
+
+    .community-name {
+      font-weight: 500;
+      color: $text-color;
+    }
+
+    .arrow {
+      font-size: 12px;
+      transition: $transition;
+
+      &.up {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .search-box {
+    flex: 0 0 500px;
+    max-width: 500px;
+
+    :global {
+      .ant-input-search-button {
+        background: $primary-color;
+        border-color: $primary-color;
+
+        &:hover {
+          background: $primary-hover;
+          border-color: $primary-hover;
+        }
+      }
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    .cart-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: $text-color;
+      cursor: pointer;
+      transition: $transition;
+
+      &:hover {
+        color: $primary-color;
+      }
+
+      .icon {
+        font-size: 20px;
+      }
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 0 12px;
+      height: 36px;
+      line-height: 36px;
+      border-radius: 18px;
+      transition: $transition;
+
+      &:hover {
+        background: $bg-color;
+      }
+
+      .username {
+        @include ellipsis;
+        max-width: 80px;
+      }
+
+      .arrow {
+        font-size: 12px;
+      }
+    }
+
+    .auth-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      a {
+        color: $text-color;
+        transition: $transition;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+
+      .divider {
+        color: $border-color;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .search-box {
+    flex: 0 0 400px;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 992px) {
+  .search-box {
+    flex: 0 0 300px;
+    max-width: 300px;
+  }
+
+  .community-selector {
+    display: none;
+  }
+}

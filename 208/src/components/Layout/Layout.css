@@ -1,0 +1,143 @@
+.main-layout {
+  min-height: 100vh;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 40px;
+}
+
+.logo-icon {
+  font-size: 28px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.main-menu {
+  flex: 1;
+  background: transparent;
+  border-bottom: none;
+  min-width: 400px;
+}
+
+.main-menu .ant-menu-item {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.main-menu .ant-menu-item:hover {
+  color: #fff;
+}
+
+.main-menu .ant-menu-item-selected {
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 8px;
+  height: 100%;
+}
+
+.user-info:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.username {
+  color: #fff;
+  margin-left: 10px;
+}
+
+.main-content {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: calc(100vh - 64px - 200px);
+}
+
+.site-footer {
+  background: #333;
+  color: #fff;
+  padding: 40px 24px 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 0 auto 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h4 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.footer-section p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom p {
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .site-header {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px;
+  }
+  
+  .logo {
+    margin-right: 20px;
+  }
+  
+  .main-menu {
+    order: 3;
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .user-section {
+    order: 2;
+  }
+}

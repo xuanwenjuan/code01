@@ -1,0 +1,85 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 64px;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 40px;
+}
+
+.logo-icon {
+  font-size: 28px;
+  margin-right: 8px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+.header-menu {
+  flex: 1;
+  background: transparent;
+  border-bottom: none;
+  min-width: 300px;
+}
+
+.header-menu :global(.ant-menu-item) {
+  color: rgba(255, 255, 255, 0.7);
+  height: 64px;
+  line-height: 64px;
+}
+
+.header-menu :global(.ant-menu-item:hover),
+.header-menu :global(.ant-menu-item-active) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.header-menu :global(.ant-menu-item-selected) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.header-menu :global(.ant-menu-item::after) {
+  border-bottom: 2px solid #d4af37;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 12px;
+  height: 36px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.user-info:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.user-name {
+  color: #fff;
+  margin-left: 8px;
+  font-size: 14px;
+}

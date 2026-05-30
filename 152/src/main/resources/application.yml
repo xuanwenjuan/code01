@@ -1,0 +1,76 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: ev-parts-manage
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ev_parts_manage?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0
+      timeout: 3000
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.evparts.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+jwt:
+  secret: ev-parts-manage-secret-key-2024-abcdefghijklmnopqrstuvwxyz
+  expiration: 86400000
+  header: Authorization
+  prefix: Bearer
+
+task:
+  work-order:
+    auto-suspend-cron: 0 0 2 * * ?
+    over-due-hours: 72
+
+knife4j:
+  enable: true
+  openapi:
+    title: 两轮电动车配件生产管控系统API文档
+    description: 两轮电动车配件生产管控后端服务接口文档
+    version: 1.0.0
+    concat: admin@evparts.com
+
+logging:
+  level:
+    com.evparts: debug
+    org.springframework: info

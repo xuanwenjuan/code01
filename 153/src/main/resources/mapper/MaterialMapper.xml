@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liquor.brewing.mapper.MaterialMapper">
+
+    <resultMap id="MaterialMap" type="com.liquor.brewing.entity.Material">
+        <id column="id" property="id"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="material_name" property="materialName"/>
+        <result column="type_id" property="typeId"/>
+        <result column="specification" property="specification"/>
+        <result column="unit" property="unit"/>
+        <result column="warning_stock" property="warningStock"/>
+        <result column="status" property="status"/>
+        <result column="is_fermented" property="isFermented"/>
+        <result column="shelf_life_days" property="shelfLifeDays"/>
+        <result column="description" property="description"/>
+        <result column="type_name" property="typeName"/>
+        <result column="type_code" property="typeCode"/>
+        <result column="total_stock" property="totalStock"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="selectMaterialPage" resultMap="MaterialMap">
+        SELECT m.*, t.type_name, t.type_code, IFNULL(SUM(b.quantity), 0) as total_stock
+        FROM material m
+        LEFT JOIN material_type t ON m.type_id = t.id
+        LEFT JOIN material_batch b ON m.id = b.material_id AND b.status = 1 AND b.deleted = 0
+        ${ew.customSqlSegment}
+        GROUP BY m.id
+        ORDER BY m.create_time DESC
+    </select>
+
+    <select id="getTotalStock" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(quantity), 0) FROM material_batch
+        WHERE material_id = #{materialId} AND status = 1 AND deleted = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,339 @@
+.home-page {
+  padding: 20px 0;
+
+  .banner-section {
+    margin-bottom: 24px;
+    border-radius: $border-radius;
+    overflow: hidden;
+
+    .banner-slide {
+      height: 360px;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 80px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, transparent 60%);
+      }
+
+      .banner-content {
+        position: relative;
+        z-index: 1;
+        color: $white;
+
+        h2 {
+          font-size: 36px;
+          font-weight: 700;
+          margin: 0;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+      }
+    }
+
+    :global {
+      .slick-dots li button {
+        width: 24px;
+        height: 4px;
+        border-radius: 2px;
+      }
+    }
+  }
+
+  .categories-section {
+    background: $white;
+    padding: 24px;
+    border-radius: $border-radius;
+    margin-bottom: 24px;
+    box-shadow: $box-shadow;
+
+    .category-item {
+      text-align: center;
+      cursor: pointer;
+      padding: 16px;
+      border-radius: $border-radius;
+      transition: $transition;
+
+      &:hover {
+        background: $bg-color;
+      }
+
+      .category-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 12px;
+        border-radius: 50%;
+        @include flex-center;
+
+        span {
+          font-size: 28px;
+        }
+      }
+
+      .category-name {
+        font-size: 14px;
+        color: $text-color;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .seckill-section {
+    background: $white;
+    padding: 24px;
+    border-radius: $border-radius;
+    margin-bottom: 24px;
+    box-shadow: $box-shadow;
+
+    .section-header {
+      @include flex-between;
+      margin-bottom: 20px;
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .title-icon {
+          font-size: 24px;
+        }
+
+        h2 {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 600;
+          color: #ff4757;
+        }
+
+        .countdown {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: $text-secondary;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .countdown-timer {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .time-box {
+        background: #333;
+        color: $white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-family: 'Courier New', monospace;
+      }
+
+      .colon {
+        font-weight: 600;
+        color: $text-color;
+      }
+
+      .expired {
+        color: $text-secondary;
+        font-style: italic;
+      }
+    }
+
+    .seckill-item {
+      border: 1px solid $border-color;
+      border-radius: $border-radius;
+      overflow: hidden;
+      background: $white;
+
+      .seckill-image {
+        position: relative;
+        height: 160px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .seckill-tag {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          background: #ff4757;
+          color: $white;
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 500;
+        }
+      }
+
+      .seckill-info {
+        padding: 12px;
+
+        .seckill-name {
+          @include ellipsis;
+          font-size: 14px;
+          margin: 0 0 8px;
+          height: 40px;
+          line-height: 20px;
+        }
+
+        .seckill-price {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+          margin-bottom: 12px;
+
+          .current-price {
+            color: #ff4757;
+            font-size: 20px;
+            font-weight: 700;
+          }
+
+          .original-price {
+            color: $text-secondary;
+            text-decoration: line-through;
+            font-size: 12px;
+          }
+        }
+
+        :global {
+          .ant-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            border: none;
+
+            &:hover {
+              opacity: 0.9;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .hot-section {
+    background: $white;
+    padding: 24px;
+    border-radius: $border-radius;
+    margin-bottom: 24px;
+    box-shadow: $box-shadow;
+
+    .section-header {
+      @include flex-between;
+      margin-bottom: 20px;
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .title-icon {
+          font-size: 24px;
+        }
+
+        h2 {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.new-user-modal {
+  :global {
+    .ant-modal-content {
+      border-radius: 16px;
+    }
+  }
+
+  .new-user-content {
+    text-align: center;
+
+    .gift-banner {
+      background: linear-gradient(135deg, #faad14, #ff4d4f);
+      padding: 40px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+
+      .gift-amount {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: $white;
+
+        .symbol {
+          font-size: 24px;
+        }
+
+        .amount {
+          font-size: 72px;
+          font-weight: 700;
+          line-height: 1;
+        }
+
+        .label {
+          font-size: 16px;
+          margin-top: 8px;
+        }
+      }
+    }
+
+    .gift-desc {
+      font-size: 16px;
+      color: $text-color;
+      margin-bottom: 16px;
+    }
+
+    .gift-rules {
+      text-align: left;
+      padding: 16px;
+      background: $bg-color;
+      border-radius: 8px;
+
+      p {
+        margin: 4px 0;
+        color: $text-secondary;
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-section .banner-slide {
+    height: 200px;
+    padding-left: 20px;
+
+    .banner-content h2 {
+      font-size: 22px;
+    }
+  }
+
+  .categories-section .category-item {
+    padding: 8px;
+
+    .category-icon {
+      width: 48px;
+      height: 48px;
+
+      span {
+        font-size: 22px;
+      }
+    }
+
+    .category-name {
+      font-size: 12px;
+    }
+  }
+}

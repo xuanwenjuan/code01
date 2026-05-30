@@ -1,0 +1,53 @@
+.price-format {
+  color: $danger-color;
+  font-weight: 700;
+
+  .symbol {
+    font-size: 0.8em;
+  }
+
+  .integer {
+    font-size: 1.2em;
+  }
+
+  .decimal {
+    font-size: 0.9em;
+  }
+
+  .original-price {
+    margin-left: 8px;
+    color: $text-secondary;
+    text-decoration: line-through;
+    font-weight: normal;
+    font-size: 0.8em;
+  }
+
+  &.price-large {
+    .symbol {
+      font-size: 18px;
+    }
+
+    .integer {
+      font-size: 42px;
+    }
+
+    .decimal {
+      font-size: 24px;
+    }
+
+    .original-price {
+      font-size: 16px;
+      margin-left: 12px;
+    }
+  }
+
+  &.price-small {
+    .integer {
+      font-size: 14px;
+    }
+
+    .decimal, .symbol {
+      font-size: 12px;
+    }
+  }
+}

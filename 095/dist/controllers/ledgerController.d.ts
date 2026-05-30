@@ -1,0 +1,11 @@
+import { Request, Response, NextFunction } from 'express';
+export declare const createLedgerValidation: import("express-validator").ValidationChain[];
+export declare const updateLedgerValidation: import("express-validator").ValidationChain[];
+export declare const createLedger: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getLedgerList: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getLedgerById: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updateLedger: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const auditLedger: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const deleteLedger: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getLedgerStatistics: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const exportLedgerReport: (req: Request, res: Response, next: NextFunction) => Promise<void>;

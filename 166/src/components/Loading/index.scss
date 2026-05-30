@@ -1,0 +1,10 @@
+.loading-wrapper {
+  @include flex-center;
+  background: $white;
+  border-radius: $border-radius;
+  padding: 40px;
+
+  &.full-height {
+    min-height: 400px;
+  }
+}

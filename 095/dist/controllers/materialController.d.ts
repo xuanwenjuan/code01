@@ -1,0 +1,16 @@
+import { Request, Response, NextFunction } from 'express';
+export declare const createMaterialValidation: import("express-validator").ValidationChain[];
+export declare const updateMaterialValidation: import("express-validator").ValidationChain[];
+export declare const stockOperationValidation: import("express-validator").ValidationChain[];
+export declare const stockLockValidation: import("express-validator").ValidationChain[];
+export declare const createMaterial: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getMaterialList: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getMaterialById: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updateMaterial: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updateStock: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const lockStock: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const unlockStock: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const batchUpdateStock: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getLowStockMaterials: (_req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getMaterialStatistics: (_req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const deleteMaterial: (req: Request, res: Response, next: NextFunction) => Promise<void>;

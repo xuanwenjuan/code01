@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liquor.brewing.mapper.WorkOrderCostMapper">
+
+    <resultMap id="WorkOrderCostMap" type="com.liquor.brewing.entity.WorkOrderCost">
+        <id column="id" property="id"/>
+        <result column="work_order_id" property="workOrderId"/>
+        <result column="material_cost" property="materialCost"/>
+        <result column="equipment_cost" property="equipmentCost"/>
+        <result column="utility_cost" property="utilityCost"/>
+        <result column="labor_cost" property="laborCost"/>
+        <result column="scrap_cost" property="scrapCost"/>
+        <result column="total_cost" property="totalCost"/>
+        <result column="output_quantity" property="outputQuantity"/>
+        <result column="unit_cost" property="unitCost"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="order_name" property="orderName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="selectCostPage" resultMap="WorkOrderCostMap">
+        SELECT wc.*, w.order_no, w.order_name
+        FROM work_order_cost wc
+        LEFT JOIN work_order w ON wc.work_order_id = w.id
+        ${ew.customSqlSegment}
+        ORDER BY wc.create_time DESC
+    </select>
+
+</mapper>

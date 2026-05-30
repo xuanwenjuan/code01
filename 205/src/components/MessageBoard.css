@@ -1,0 +1,148 @@
+.message-board {
+  border-radius: 12px;
+}
+
+.board-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.board-icon {
+  color: #d4af37;
+  font-size: 18px;
+}
+
+.message-form {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.message-form .ant-btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #c4a030 100%);
+  border-color: #d4af37;
+  height: 40px;
+}
+
+.message-form .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #c4a030 0%, #b09020 100%) !important;
+  border-color: #c4a030 !important;
+}
+
+.messages-list {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.message-item {
+  padding: 16px 0 !important;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.message-item:last-child {
+  border-bottom: none;
+}
+
+.message-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.message-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.message-content p {
+  margin: 0 0 12px 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.replies {
+  margin: 12px 0;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.reply-item {
+  margin-bottom: 12px;
+}
+
+.reply-item:last-child {
+  margin-bottom: 0;
+}
+
+.reply-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.reply-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+.reply-time {
+  font-size: 11px;
+  color: #999;
+  margin-left: auto;
+}
+
+.reply-content {
+  margin: 0 0 0 36px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.message-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.message-actions .ant-btn {
+  padding: 0 8px;
+  height: 28px;
+  font-size: 12px;
+}
+
+.reply-form {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.reply-form .ant-form-item {
+  margin-bottom: 8px;
+}
+
+.empty-messages {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.empty-messages p {
+  margin: 0;
+  font-size: 14px;
+}

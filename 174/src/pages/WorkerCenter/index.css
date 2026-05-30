@@ -1,0 +1,46 @@
+.worker-center {
+  min-height: calc(100vh - 64px - 120px);
+}
+
+.worker-profile {
+  text-align: center;
+  padding: 0 24px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+}
+
+.worker-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 12px 0 8px;
+  color: #1a1a1a;
+}
+
+.worker-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px 0;
+  padding: 12px 0;
+  background: #f5f7fa;
+  border-radius: 8px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1677ff;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #999;
+}
+
+.worker-skills {
+  margin-top: 12px;
+}

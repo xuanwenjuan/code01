@@ -1,0 +1,117 @@
+.book-card {
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.book-cover-wrapper {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover .book-cover {
+  transform: scale(1.05);
+}
+
+.book-status-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.book-progress {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.book-progress .ant-progress {
+  flex: 1;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.book-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-info {
+  font-size: 13px;
+}
+
+.book-meta {
+  color: #8c8c8c;
+  margin-bottom: 6px;
+}
+
+.book-author {
+  color: #595959;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.book-tags {
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.book-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.view-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.restorer-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.estimated-days {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

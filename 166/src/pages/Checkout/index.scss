@@ -1,0 +1,255 @@
+.checkout-page {
+  padding: 20px 0;
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .checkout-card {
+    margin-bottom: 20px;
+    box-shadow: $box-shadow;
+
+    .address-list {
+      .address-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: $transition;
+
+        &:hover {
+          border-color: $primary-color;
+        }
+
+        &.selected {
+          border-color: $primary-color;
+          background: rgba($primary-color, 0.05);
+        }
+
+        .address-info {
+          flex: 1;
+
+          .address-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+
+            .name {
+              font-weight: 600;
+            }
+
+            .phone {
+              color: $text-secondary;
+            }
+          }
+
+          .address-detail {
+            color: $text-secondary;
+          }
+        }
+      }
+
+      .add-address-btn {
+        padding: 20px;
+        height: auto;
+      }
+    }
+
+    .delivery-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+
+      .delivery-item {
+        min-width: 120px;
+        height: 48px;
+
+        &.ant-btn-primary {
+          background: $primary-color;
+          border-color: $primary-color;
+        }
+
+        .sold-out {
+          font-size: 12px;
+          color: $text-secondary;
+          margin-left: 4px;
+        }
+      }
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0;
+
+      .item-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .item-info {
+        flex: 1;
+
+        .item-name {
+          @include ellipsis;
+          max-width: 300px;
+          margin-bottom: 4px;
+        }
+
+        .item-spec {
+          font-size: 12px;
+          color: $text-secondary;
+        }
+      }
+
+      .item-price {
+        text-align: right;
+
+        .price {
+          color: $danger-color;
+          font-weight: 600;
+          margin-right: 8px;
+        }
+
+        .quantity {
+          color: $text-secondary;
+        }
+      }
+    }
+  }
+
+  .summary-card {
+    position: sticky;
+    top: 84px;
+    box-shadow: $box-shadow;
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      font-size: 14px;
+
+      &.total {
+        font-size: 18px;
+        font-weight: 600;
+
+        .total-price {
+          color: $danger-color;
+          font-size: 24px;
+        }
+      }
+
+      .coupon-select {
+        cursor: pointer;
+        color: $primary-color;
+
+        .selected-coupon {
+          color: $danger-color;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .submit-btn {
+      height: 48px;
+      font-size: 16px;
+      margin-top: 16px;
+    }
+  }
+
+  .empty-state {
+    @include flex-center;
+    flex-direction: column;
+    min-height: 400px;
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
+    p {
+      font-size: 16px;
+      color: $text-secondary;
+      margin-bottom: 20px;
+    }
+  }
+
+  .coupon-list {
+    .coupon-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: $transition;
+
+      &:hover {
+        border-color: $primary-color;
+      }
+
+      &.selected {
+        border-color: $primary-color;
+        background: rgba($primary-color, 0.05);
+      }
+
+      &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .coupon-amount {
+        text-align: center;
+        color: $danger-color;
+        padding-right: 16px;
+        border-right: 1px dashed $border-color;
+
+        .symbol {
+          font-size: 14px;
+        }
+
+        .value {
+          font-size: 32px;
+          font-weight: 700;
+        }
+      }
+
+      .coupon-info {
+        flex: 1;
+
+        .coupon-name {
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .coupon-condition {
+          font-size: 12px;
+          color: $text-secondary;
+          margin-bottom: 4px;
+        }
+
+        .coupon-time {
+          font-size: 12px;
+          color: $text-secondary;
+        }
+      }
+
+      .selected-icon {
+        color: $primary-color;
+        font-size: 20px;
+      }
+    }
+  }
+}

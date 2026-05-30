@@ -1,0 +1,17 @@
+import { Request, Response, NextFunction } from 'express';
+export declare const createOrderValidation: import("express-validator").ValidationChain[];
+export declare const updateOrderStatusValidation: import("express-validator").ValidationChain[];
+export declare const createOrder: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getOrderList: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getOrderById: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updateOrderStatus: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updateOrder: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const cancelOrder: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getOrderLogs: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getOrderStatistics: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const scheduleProductionValidation: import("express-validator").ValidationChain[];
+export declare const scheduleProduction: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const returnApplicationValidation: import("express-validator").ValidationChain[];
+export declare const createReturnApplication: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const approveReturnValidation: import("express-validator").ValidationChain[];
+export declare const approveReturn: (req: Request, res: Response, next: NextFunction) => Promise<void>;

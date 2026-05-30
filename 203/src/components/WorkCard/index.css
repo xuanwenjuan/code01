@@ -1,0 +1,46 @@
+.work-card {
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.work-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.work-card-image {
+  height: 220px;
+  object-fit: cover;
+}
+
+.work-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.work-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.work-card-artisan {
+  font-size: 13px;
+  color: #666;
+}
+
+.work-card-description {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}

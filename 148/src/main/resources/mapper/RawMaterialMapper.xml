@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.textile.production.mapper.RawMaterialMapper">
+
+    <resultMap id="RawMaterialWithBatchMap" type="com.textile.production.entity.RawMaterial">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="specification" property="specification"/>
+        <result column="unit" property="unit"/>
+        <result column="total_quantity" property="totalQuantity"/>
+        <result column="warning_quantity" property="warningQuantity"/>
+        <result column="moisture_proof" property="moistureProof"/>
+        <result column="status" property="status"/>
+        <result column="description" property="description"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <collection property="children" ofType="com.textile.production.entity.RawMaterialBatch">
+            <id column="batch_id" property="id"/>
+            <result column="batch_code" property="batchCode"/>
+            <result column="batch_quantity" property="quantity"/>
+            <result column="unit_price" property="unitPrice"/>
+            <result column="supplier" property="supplier"/>
+            <result column="production_date" property="productionDate"/>
+            <result column="expiry_date" property="expiryDate"/>
+            <result column="warehouse_area" property="warehouseArea"/>
+            <result column="humidity" property="humidity"/>
+            <result column="moisture_warning" property="moistureWarning"/>
+            <result column="batch_status" property="status"/>
+        </collection>
+    </resultMap>
+
+    <select id="getMaterialWithAvailableBatches" resultMap="RawMaterialWithBatchMap">
+        SELECT
+            m.id,
+            m.name,
+            m.type,
+            m.specification,
+            m.unit,
+            m.total_quantity,
+            m.warning_quantity,
+            m.moisture_proof,
+            m.status,
+            b.id AS batch_id,
+            b.batch_code,
+            b.quantity AS batch_quantity,
+            b.unit_price,
+            b.supplier,
+            b.production_date,
+            b.expiry_date,
+            b.warehouse_area,
+            b.humidity,
+            b.moisture_warning,
+            b.status AS batch_status
+        FROM raw_material m
+        LEFT JOIN raw_material_batch b ON m.id = b.material_id AND b.status = 1 AND b.quantity > 0
+        <where>
+            m.deleted = 0
+            <if test="type != null and type != ''">
+                AND m.type = #{type}
+            </if>
+            <if test="status != null and status != ''">
+                AND m.status = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (m.name LIKE CONCAT('%', #{keyword}, '%') OR m.specification LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY m.create_time DESC, b.production_date ASC
+    </select>
+
+    <select id="getMaterialStockStatistics" resultType="java.util.Map">
+        SELECT
+            m.type,
+            COUNT(DISTINCT m.id) AS material_count,
+            SUM(m.total_quantity) AS total_quantity,
+            SUM(CASE WHEN m.status = 'NORMAL' THEN 1 ELSE 0 END) AS normal_count,
+            SUM(CASE WHEN m.status = 'WARNING' THEN 1 ELSE 0 END) AS warning_count,
+            SUM(CASE WHEN m.status = 'STOP' THEN 1 ELSE 0 END) AS stop_count
+        FROM raw_material m
+        WHERE m.deleted = 0
+        GROUP BY m.type
+        ORDER BY m.type
+    </select>
+
+    <select id="getBatchUsageStatistics" resultType="java.util.Map">
+        SELECT
+            m.name AS material_name,
+            m.type,
+            SUM(CASE WHEN b.status = 1 THEN b.quantity ELSE 0 END) AS available_quantity,
+            SUM(CASE WHEN b.status = 0 THEN b.quantity ELSE 0 END) AS used_quantity,
+            COUNT(b.id) AS batch_count,
+            SUM(CASE WHEN b.moisture_warning = 1 THEN 1 ELSE 0 END) AS moisture_warning_count
+        FROM raw_material m
+        LEFT JOIN raw_material_batch b ON m.id = b.material_id
+        WHERE m.deleted = 0 AND b.deleted = 0
+        <where>
+            <if test="startDate != null">
+                AND b.create_time >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND b.create_time <= #{endDate}
+            </if>
+        </where>
+        GROUP BY m.id, m.name, m.type
+        ORDER BY available_quantity DESC
+    </select>
+</mapper>

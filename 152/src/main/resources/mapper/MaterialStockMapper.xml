@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evparts.mapper.MaterialStockMapper">
+
+    <resultMap id="StockDetailMap" type="com.evparts.entity.MaterialStock">
+        <id column="id" property="id"/>
+        <result column="material_id" property="materialId"/>
+        <result column="batch_no" property="batchNo"/>
+        <result column="quantity" property="quantity"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="warehouse" property="warehouse"/>
+        <result column="inbound_date" property="inboundDate"/>
+        <result column="expiry_date" property="expiryDate"/>
+        <result column="stock_status" property="stockStatus"/>
+        <result column="moisture_check_time" property="moistureCheckTime"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="material_name" property="materialName"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="material_type" property="specification"/>
+        <result column="specification" property="specification"/>
+        <result column="unit" property="unit"/>
+        <result column="moisture_proof" property="moistureProof"/>
+        <result column="warning_stock" property="unit"/>
+    </resultMap>
+
+    <select id="getStockDetailPage" resultMap="StockDetailMap">
+        SELECT
+            ms.*,
+            m.material_name,
+            m.material_code,
+            m.material_type,
+            m.specification,
+            m.unit,
+            m.moisture_proof,
+            m.warning_stock
+        FROM material_stock ms
+        LEFT JOIN material m ON ms.material_id = m.id
+        <where>
+            ms.deleted = 0
+            <if test="materialName != null and materialName != ''">
+                AND m.material_name LIKE CONCAT('%', #{materialName}, '%')
+            </if>
+            <if test="materialCode != null and materialCode != ''">
+                AND m.material_code LIKE CONCAT('%', #{materialCode}, '%')
+            </if>
+            <if test="materialType != null and materialType != ''">
+                AND m.material_type = #{materialType}
+            </if>
+            <if test="stockStatus != null">
+                AND ms.stock_status = #{stockStatus}
+            </if>
+            <if test="warehouse != null and warehouse != ''">
+                AND ms.warehouse = #{warehouse}
+            </if>
+            <if test="moistureWarning == true">
+                AND m.moisture_proof = 1
+                AND ms.moisture_check_time <![CDATA[ < ]]> DATE_SUB(NOW(), INTERVAL 7 DAY)
+            </if>
+        </where>
+        ORDER BY ms.create_time DESC
+    </select>
+
+    <select id="getStockByMaterialId" resultMap="StockDetailMap">
+        SELECT
+            ms.*,
+            m.material_name,
+            m.material_code,
+            m.specification,
+            m.unit,
+            m.moisture_proof
+        FROM material_stock ms
+        LEFT JOIN material m ON ms.material_id = m.id
+        WHERE ms.material_id = #{materialId}
+          AND ms.deleted = 0
+          AND ms.quantity > 0
+        ORDER BY ms.inbound_date ASC
+    </select>
+
+    <select id="getTotalStockByMaterialId" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(quantity), 0)
+        FROM material_stock
+        WHERE material_id = #{materialId}
+          AND deleted = 0
+          AND stock_status != 3
+    </select>
+
+    <update id="updateStockQuantity">
+        UPDATE material_stock
+        SET quantity = quantity + #{changeQuantity},
+            update_time = NOW()
+        WHERE id = #{stockId}
+    </update>
+
+    <select id="getStockSummary" resultType="java.util.Map">
+        SELECT
+            m.id AS material_id,
+            m.material_name,
+            m.material_code,
+            m.material_type,
+            m.unit,
+            m.warning_stock,
+            COALESCE(SUM(ms.quantity), 0) AS total_stock,
+            SUM(CASE WHEN ms.stock_status = 1 THEN ms.quantity ELSE 0 END) AS normal_stock,
+            SUM(CASE WHEN ms.stock_status = 2 THEN ms.quantity ELSE 0 END) AS warning_stock_qty,
+            SUM(CASE WHEN ms.stock_status = 3 THEN ms.quantity ELSE 0 END) AS expired_stock,
+            COUNT(DISTINCT ms.id) AS batch_count
+        FROM material m
+        LEFT JOIN material_stock ms ON m.id = ms.material_id AND ms.deleted = 0
+        WHERE m.deleted = 0
+        GROUP BY m.id, m.material_name, m.material_code, m.material_type, m.unit, m.warning_stock
+        ORDER BY total_stock DESC
+    </select>
+
+</mapper>

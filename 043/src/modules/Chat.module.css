@@ -1,0 +1,249 @@
+.container {
+  display: flex;
+  height: 100%;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 320px;
+  border-right: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchBox {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.filterTabs {
+  padding: 0 16px 8px;
+  justify-content: center;
+}
+
+.sessionList {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sessionItem {
+  cursor: pointer;
+  padding: 12px 16px;
+  transition: background 0.2s;
+}
+
+.sessionItem:hover {
+  background: #f5f5f5;
+}
+
+.sessionItem.active {
+  background: #e6f7ff;
+}
+
+.sessionName {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.sessionPreview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.lastMessage {
+  font-size: 12px;
+  color: #999;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lastMessageTime {
+  font-size: 11px;
+  color: #ccc;
+}
+
+.chatArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chatHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatTitle {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.messageContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background: #f7f8fa;
+  position: relative;
+}
+
+.virtualList {
+  height: 100%;
+}
+
+.emptyMessages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.messageBubble {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  max-width: 70%;
+}
+
+.ownMessage {
+  margin-left: auto;
+  flex-direction: row-reverse;
+}
+
+.otherMessage {
+  margin-right: auto;
+}
+
+.messageContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.senderName {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.messageText {
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.ownMessage .messageText {
+  background: #1890ff;
+  color: #fff;
+}
+
+.messageMeta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.otherMessage .messageMeta {
+  justify-content: flex-start;
+}
+
+.messageTime {
+  font-size: 11px;
+  color: #999;
+}
+
+.ownMessage .messageTime {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.statusIcon {
+  font-size: 12px;
+  color: #52c41a;
+}
+
+.statusIconRead {
+  font-size: 12px;
+  color: #1890ff;
+}
+
+.inputArea {
+  padding: 16px 20px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.messageInput {
+  flex: 1;
+}
+
+.noSessionSelected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #f7f8fa;
+}
+
+.scrollBottomBtn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .messageBubble {
+    max-width: 85%;
+  }
+
+  .chatHeader {
+    padding: 12px 16px;
+  }
+
+  .messageContainer {
+    padding: 12px;
+  }
+
+  .inputArea {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .messageBubble {
+    max-width: 95%;
+    gap: 8px;
+  }
+
+  .messageText {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}

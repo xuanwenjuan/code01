@@ -1,0 +1,1 @@
+import{be as s}from"./index-CsIY-Iqj.js";const l=(n,t=8)=>{const[o,r]=s.useState(1),a=s.useMemo(()=>{const e=(o-1)*t;return n.slice(e,e+t)},[n,o,t]),c=n.length;return{paginatedData:a,currentPage:o,total:c,pageSize:t,handlePageChange:e=>{r(e),window.scrollTo({top:0,behavior:"smooth"})}}};export{l as u};

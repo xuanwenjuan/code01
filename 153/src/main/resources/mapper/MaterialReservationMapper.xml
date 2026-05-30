@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liquor.brewing.mapper.MaterialReservationMapper">
+
+    <resultMap id="MaterialReservationMap" type="com.liquor.brewing.entity.MaterialReservation">
+        <id column="id" property="id"/>
+        <result column="reservation_no" property="reservationNo"/>
+        <result column="material_id" property="materialId"/>
+        <result column="batch_id" property="batchId"/>
+        <result column="work_order_id" property="workOrderId"/>
+        <result column="quantity" property="quantity"/>
+        <result column="status" property="status"/>
+        <result column="expire_time" property="expireTime"/>
+        <result column="remark" property="remark"/>
+        <result column="material_name" property="materialName"/>
+        <result column="batch_code" property="batchCode"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <select id="selectReservationPage" resultMap="MaterialReservationMap">
+        SELECT r.*, m.material_name, b.batch_code, w.order_no
+        FROM material_reservation r
+        LEFT JOIN material m ON r.material_id = m.id
+        LEFT JOIN material_batch b ON r.batch_id = b.id
+        LEFT JOIN work_order w ON r.work_order_id = w.id
+        ${ew.customSqlSegment}
+        ORDER BY r.create_time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.amber.polish.mapper.ProfitLedgerMapper">
+
+    <select id="statisticsByCategory" resultType="com.amber.polish.vo.ProfitStatisticsVO">
+        SELECT
+            pl.category_id AS categoryId,
+            c.category_name AS categoryName,
+            SUM(pl.raw_stone_cost) AS totalRawStoneCost,
+            SUM(pl.material_cost) AS totalMaterialCost,
+            SUM(pl.labor_cost) AS totalLaborCost,
+            SUM(pl.total_cost) AS totalCost,
+            SUM(pl.order_income) AS totalIncome,
+            SUM(pl.profit_amount) AS totalProfit,
+            AVG(pl.profit_rate) AS avgProfitRate,
+            COUNT(*) AS orderCount
+        FROM profit_ledger pl
+        LEFT JOIN amber_category c ON pl.category_id = c.id
+        <where>
+            pl.deleted = 0
+            <if test="startDate != null">
+                AND pl.ledger_date >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND pl.ledger_date <= #{endDate}
+            </if>
+        </where>
+        GROUP BY pl.category_id, c.category_name
+        ORDER BY totalProfit DESC
+    </select>
+
+</mapper>

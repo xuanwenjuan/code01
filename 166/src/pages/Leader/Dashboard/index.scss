@@ -1,0 +1,121 @@
+.leader-dashboard {
+  padding: 20px 0;
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .stats-row {
+    margin-bottom: 20px;
+
+    .stat-card {
+      box-shadow: $box-shadow;
+      border-radius: $border-radius;
+
+      .stat-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        .stat-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
+          @include flex-center;
+          font-size: 24px;
+        }
+
+        .stat-value {
+          :global {
+            .ant-statistic-title {
+              font-size: 13px;
+              color: $text-secondary;
+              margin-bottom: 4px;
+            }
+
+            .ant-statistic-content-value {
+              font-size: 24px;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .charts-row {
+    margin-bottom: 20px;
+
+    .chart-card {
+      box-shadow: $box-shadow;
+      border-radius: $border-radius;
+
+      .sales-chart {
+        .chart-item {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 20px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          span {
+            width: 80px;
+            color: $text-secondary;
+          }
+
+          :global(.ant-progress) {
+            flex: 1;
+          }
+
+          strong {
+            width: 60px;
+            text-align: right;
+            font-size: 18px;
+            color: $primary-color;
+          }
+        }
+      }
+
+      .leader-stats {
+        .leader-stat-item {
+          display: flex;
+          justify-content: space-between;
+          padding: 12px 0;
+          border-bottom: 1px solid $border-color;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .stat-label {
+            color: $text-secondary;
+          }
+
+          .stat-value {
+            font-weight: 500;
+
+            &.price {
+              color: $danger-color;
+              font-size: 18px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .orders-card {
+    box-shadow: $box-shadow;
+    border-radius: $border-radius;
+
+    .price {
+      color: $danger-color;
+      font-weight: 600;
+    }
+  }
+}

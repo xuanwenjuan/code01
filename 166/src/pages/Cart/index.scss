@@ -1,0 +1,117 @@
+.cart-page {
+  padding: 20px 0;
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .cart-table-card {
+    margin-bottom: 20px;
+    box-shadow: $box-shadow;
+
+    .cart-table {
+      :global {
+        .ant-table-thead > tr > th {
+          background: $bg-color;
+          font-weight: 600;
+        }
+      }
+
+      .product-cell {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+
+        .product-image {
+          width: 80px;
+          height: 80px;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+
+        .product-info {
+          .product-name {
+            font-size: 14px;
+            margin-bottom: 4px;
+            @include ellipsis;
+            max-width: 300px;
+          }
+
+          .product-spec {
+            font-size: 12px;
+            color: $text-secondary;
+          }
+        }
+      }
+
+      .price, .subtotal {
+        color: $danger-color;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .cart-footer {
+    position: sticky;
+    bottom: 0;
+    background: $white;
+    padding: 20px;
+    border-radius: $border-radius;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+
+    .cart-summary {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      .summary-item {
+        font-size: 14px;
+
+        &.total {
+          font-size: 16px;
+
+          .total-price {
+            color: $danger-color;
+            font-size: 24px;
+            font-weight: 700;
+            margin-left: 8px;
+          }
+        }
+
+        strong {
+          color: $danger-color;
+          font-size: 18px;
+        }
+      }
+
+      .checkout-btn {
+        width: 160px;
+        height: 48px;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .empty-cart {
+    @include flex-center;
+    flex-direction: column;
+    min-height: 400px;
+    background: $white;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
+    .empty-icon {
+      font-size: 80px;
+      color: #d9d9d9;
+      margin-bottom: 16px;
+    }
+
+    p {
+      color: $text-secondary;
+      margin-bottom: 24px;
+      font-size: 16px;
+    }
+  }
+}
